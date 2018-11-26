@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task.im/Style/theme.dart' as Theme;
 import 'package:task.im/Helpers/LoginPageBubble.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:task.im/services/usermanagement.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -16,6 +17,7 @@ class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
   String _email;
   String _password;
+  String _nickName;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -162,7 +164,7 @@ class _LoginPageState extends State<LoginPage>
             fontSize: 16.0,
             fontFamily: "WorkSansSemiBold"),
       ),
-      backgroundColor: Colors.blue,
+      //backgroundColor: Colors.blue,
       duration: Duration(seconds: 3),
     ));
   }
@@ -510,6 +512,9 @@ class _LoginPageState extends State<LoginPage>
                             hintStyle: TextStyle(
                                 fontFamily: "WorkSansSemiBold", fontSize: 16.0),
                           ),
+                          onChanged: (val) {
+                            _nickName = val;
+                          },
                         ),
                       ),
                       Container(
@@ -538,6 +543,9 @@ class _LoginPageState extends State<LoginPage>
                             hintStyle: TextStyle(
                                 fontFamily: "WorkSansSemiBold", fontSize: 16.0),
                           ),
+                          onChanged: (val) {
+                            _email = val;
+                          },
                         ),
                       ),
                       Container(
@@ -574,6 +582,9 @@ class _LoginPageState extends State<LoginPage>
                               ),
                             ),
                           ),
+                          onChanged: (val) {
+                            _password = val;
+                          },
                         ),
                       ),
                       Container(
@@ -643,24 +654,49 @@ class _LoginPageState extends State<LoginPage>
                     //     tileMode: TileMode.clamp),
                     ),
                 child: MaterialButton(
-                    // color: Theme.Colors.loginGradientEnd,
+                  // color: Theme.Colors.loginGradientEnd,
 
-                    // elevation: 10.0,
-                    // highlightColor: Colors.transparent,
-                    // splashColor: Theme.Colors.loginGradientEnd,
-                    //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 42.0),
-                      child: Text(
-                        "SIGN UP",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25.0,
-                            fontFamily: "WorkSansBold"),
-                      ),
+                  // elevation: 10.0,
+                  // highlightColor: Colors.transparent,
+                  // splashColor: Theme.Colors.loginGradientEnd,
+                  //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 42.0),
+                    child: Text(
+                      "SIGN UP",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25.0,
+                          fontFamily: "WorkSansBold"),
                     ),
-                    onPressed: () => showInSnackBar("SignUp button pressed")),
+                  ),
+                  onPressed: () {
+                    showInSnackBar("Authenticating..");
+                    FirebaseAuth.instance
+                        .createUserWithEmailAndPassword(
+                            email: _email, password: _password)
+                        .then((signedInUser) {
+                      var userUpdateInfo = new UserUpdateInfo();
+                      userUpdateInfo.displayName = _nickName;
+                      userUpdateInfo.photoUrl =
+                          'https://pixel.nymag.com/imgs/daily/vulture/2017/06/14/14-tom-cruise.w700.h700.jpg';
+                      FirebaseAuth.instance
+                          .updateProfile(userUpdateInfo)
+                          .then((user) {
+                        FirebaseAuth.instance.currentUser().then((user) {
+                          UserManagement().storeNewUser(user, context);
+                        }).catchError((e) {
+                          print(e);
+                        });
+                      }).catchError((e) {
+                        print(e);
+                      });
+                    }).catchError((e) {
+                      print(e);
+                    });
+                  },
+                ),
               ),
             ],
           ),
