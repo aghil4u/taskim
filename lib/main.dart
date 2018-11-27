@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-
-//pages
-import 'homepage.dart';
+import 'Style/theme.dart' as Theme;
+import 'Pages/Home/HomePage.dart';
 import 'Pages/LoginPage.dart';
-import 'signuppage.dart';
 import 'selectprofpic.dart';
 
 void main() => runApp(new MyApp());
@@ -14,10 +12,9 @@ class MyApp extends StatelessWidget {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
       home: LoginPage(),
-      theme: ThemeData(primarySwatch: Colors.teal),
+      theme: ThemeData(primarySwatch: Colors.blue),
       routes: <String, WidgetBuilder>{
         '/landingpage': (BuildContext context) => new MyApp(),
-        '/signup': (BuildContext context) => new SignupPage(),
         '/homepage': (BuildContext context) => new HomePage(),
         '/selectpic': (BuildContext context) => new SelectprofilepicPage()
       },
