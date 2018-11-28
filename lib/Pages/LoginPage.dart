@@ -75,14 +75,14 @@ class _LoginPageState extends State<LoginPage>
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 Padding(
-                    padding: EdgeInsets.only(top: 75.0, bottom: 50.0),
+                    padding: EdgeInsets.only(top: 120.0, bottom: 50.0),
                     child: Text(
                       "Task.im",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 40,
                           fontWeight: FontWeight.bold,
-                          fontFamily: "WorkSansSemiBold"),
+                          fontFamily: Theme.Fonts.quickBoldFont),
                     )
                     // new Image(
                     //     width: 250.0,
@@ -162,7 +162,7 @@ class _LoginPageState extends State<LoginPage>
         style: TextStyle(
             color: Colors.white,
             fontSize: 16.0,
-            fontFamily: "WorkSansSemiBold"),
+            fontFamily: Theme.Fonts.quickBoldFont),
       ),
       //backgroundColor: Colors.blue,
       duration: Duration(seconds: 3),
@@ -192,7 +192,7 @@ class _LoginPageState extends State<LoginPage>
                   style: TextStyle(
                       color: left,
                       fontSize: 16.0,
-                      fontFamily: "WorkSansSemiBold"),
+                      fontFamily: Theme.Fonts.quickBoldFont),
                 ),
               ),
             ),
@@ -207,7 +207,7 @@ class _LoginPageState extends State<LoginPage>
                   style: TextStyle(
                       color: right,
                       fontSize: 16.0,
-                      fontFamily: "WorkSansSemiBold"),
+                      fontFamily: Theme.Fonts.quickBoldFont),
                 ),
               ),
             ),
@@ -245,7 +245,7 @@ class _LoginPageState extends State<LoginPage>
                           controller: loginEmailController,
                           keyboardType: TextInputType.emailAddress,
                           style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
+                              fontFamily: Theme.Fonts.quickBoldFont,
                               fontSize: 16.0,
                               color: Colors.black),
                           decoration: InputDecoration(
@@ -257,7 +257,8 @@ class _LoginPageState extends State<LoginPage>
                             ),
                             hintText: "Email Address",
                             hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                                fontFamily: Theme.Fonts.quickBoldFont,
+                                fontSize: 17.0),
                           ),
                           onChanged: (value) {
                             _email = value;
@@ -277,7 +278,7 @@ class _LoginPageState extends State<LoginPage>
                           controller: loginPasswordController,
                           obscureText: _obscureTextLogin,
                           style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
+                              fontFamily: Theme.Fonts.quickBoldFont,
                               fontSize: 16.0,
                               color: Colors.black),
                           decoration: InputDecoration(
@@ -289,7 +290,8 @@ class _LoginPageState extends State<LoginPage>
                             ),
                             hintText: "Password",
                             hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                                fontFamily: Theme.Fonts.quickBoldFont,
+                                fontSize: 17.0),
                             suffixIcon: GestureDetector(
                               onTap: _toggleLogin,
                               child: Icon(
@@ -346,7 +348,7 @@ class _LoginPageState extends State<LoginPage>
                       "LOGIN",
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 25.0,
+                          fontSize: 20.0,
                           fontFamily: "WorkSansBold"),
                     ),
                   ),
@@ -375,7 +377,7 @@ class _LoginPageState extends State<LoginPage>
                       decoration: TextDecoration.underline,
                       color: Colors.white,
                       fontSize: 16.0,
-                      fontFamily: "WorkSansMedium"),
+                      fontFamily: Theme.Fonts.quickBoldFont),
                 )),
           ),
           Padding(
@@ -405,7 +407,7 @@ class _LoginPageState extends State<LoginPage>
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16.0,
-                        fontFamily: "WorkSansMedium"),
+                        fontFamily: Theme.Fonts.quickBoldFont),
                   ),
                 ),
                 Container(
@@ -499,7 +501,7 @@ class _LoginPageState extends State<LoginPage>
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,
                           style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
+                              fontFamily: Theme.Fonts.quickBoldFont,
                               fontSize: 16.0,
                               color: Colors.black),
                           decoration: InputDecoration(
@@ -510,7 +512,8 @@ class _LoginPageState extends State<LoginPage>
                             ),
                             hintText: "Name",
                             hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                                fontFamily: Theme.Fonts.quickBoldFont,
+                                fontSize: 16.0),
                           ),
                           onChanged: (val) {
                             _nickName = val;
@@ -530,7 +533,7 @@ class _LoginPageState extends State<LoginPage>
                           controller: signupEmailController,
                           keyboardType: TextInputType.emailAddress,
                           style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
+                              fontFamily: Theme.Fonts.quickBoldFont,
                               fontSize: 16.0,
                               color: Colors.black),
                           decoration: InputDecoration(
@@ -541,7 +544,8 @@ class _LoginPageState extends State<LoginPage>
                             ),
                             hintText: "Email Address",
                             hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                                fontFamily: Theme.Fonts.quickBoldFont,
+                                fontSize: 16.0),
                           ),
                           onChanged: (val) {
                             _email = val;
@@ -561,7 +565,7 @@ class _LoginPageState extends State<LoginPage>
                           controller: signupPasswordController,
                           obscureText: _obscureTextSignup,
                           style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
+                              fontFamily: Theme.Fonts.quickBoldFont,
                               fontSize: 16.0,
                               color: Colors.black),
                           decoration: InputDecoration(
@@ -572,7 +576,8 @@ class _LoginPageState extends State<LoginPage>
                             ),
                             hintText: "Password",
                             hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                                fontFamily: Theme.Fonts.quickBoldFont,
+                                fontSize: 16.0),
                             suffixIcon: GestureDetector(
                               onTap: _toggleSignup,
                               child: Icon(
@@ -599,7 +604,7 @@ class _LoginPageState extends State<LoginPage>
                           controller: signupConfirmPasswordController,
                           obscureText: _obscureTextSignupConfirm,
                           style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
+                              fontFamily: Theme.Fonts.quickBoldFont,
                               fontSize: 16.0,
                               color: Colors.black),
                           decoration: InputDecoration(
@@ -610,7 +615,8 @@ class _LoginPageState extends State<LoginPage>
                             ),
                             hintText: "Confirmation",
                             hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                                fontFamily: Theme.Fonts.quickBoldFont,
+                                fontSize: 16.0),
                             suffixIcon: GestureDetector(
                               onTap: _toggleSignupConfirm,
                               child: Icon(
@@ -639,7 +645,7 @@ class _LoginPageState extends State<LoginPage>
                       BoxShadow(
                         color: Theme.Colors.loginGradientEnd,
                         offset: Offset(1.0, 10.0),
-                        blurRadius: 20.0,
+                        blurRadius: 10.0,
                       ),
                     ],
                     color: Theme.Colors.loginGradientEnd
@@ -667,7 +673,7 @@ class _LoginPageState extends State<LoginPage>
                       "SIGN UP",
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 25.0,
+                          fontSize: 20.0,
                           fontFamily: "WorkSansBold"),
                     ),
                   ),

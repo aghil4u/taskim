@@ -38,19 +38,6 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: AppBar(
-        bottom: TabBar(
-          controller: tabController,
-          tabs: <Widget>[
-            new Tab(
-              text: "LISTINGS",
-            ),
-            new Tab(
-              text: "MAP",
-            ),
-          ],
-        ),
-      ),
       drawer: new Drawer(
         child: new ListView(
           children: <Widget>[
@@ -69,12 +56,12 @@ class _HomePageState extends State<HomePage>
         child: Icon(Icons.add),
         backgroundColor: Theme.Colors.loginGradientStart,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      bottomNavigationBar: new CustomBottomAppBar(
-        color: Colors.white,
-        fabLocation: FloatingActionButtonLocation.endDocked,
-        shape: CircularNotchedRectangle(),
-      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      // bottomNavigationBar: new CustomBottomAppBar(
+      //   color: Colors.white,
+      //   fabLocation: FloatingActionButtonLocation.endDocked,
+      //   shape: CircularNotchedRectangle(),
+      // ),
       // bottomNavigationBar: new Material(
       //   color: Colors.teal,
       //   child: TabBar(

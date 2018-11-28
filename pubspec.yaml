@@ -40,3 +40,16 @@ flutter:
     - family: WorkSansMedium
       fonts:
         - asset: assets/fonts/Work_Sans/WorkSans-Medium.ttf
+
+    - family: Quicksand
+      fonts:
+        - asset: assets/fonts/Quicksand-Medium.ttf
+          style: normal
+        - asset: assets/fonts/Quicksand_Bold.otf
+          weight: 700
+
+    - family: Raleway
+      fonts:
+        - asset: assets/fonts/Raleway-Regular.ttf
+          style: normal
+        - asset: assets/fonts/Raleway-Medium.ttf
