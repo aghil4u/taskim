@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:task.im/ui/page/dashboard/dashboard_one/dashboard_menu_row.dart';
-import 'package:task.im/ui/widgets/login_background.dart';
-import 'package:task.im/ui/widgets/profile_tile.dart';
+import 'package:task.im/Helpers/Dashboard_Helper.dart';
 import 'package:task.im/Style/theme.dart' as Theme;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -13,33 +11,39 @@ class HomePage_ListingsTab extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 18.0),
           child: new Column(
             children: <Widget>[
-              new Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  new IconButton(
-                      icon: new Icon(
-                        defaultTargetPlatform == TargetPlatform.android
-                            ? Icons.menu
-                            : Icons.menu,
-                        color: Colors.white,
+                  new Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      new IconButton(
+                          icon: new Icon(
+                            defaultTargetPlatform == TargetPlatform.android
+                                ? Icons.menu
+                                : Icons.menu,
+                            color: Colors.white,
+                          ),
+                          onPressed: () => Scaffold.of(context).openDrawer()),
+                      new DashboardTitle(
+                        title: "Task.im",
+                        textColor: Colors.white,
                       ),
-                      onPressed: () => Scaffold.of(context).openDrawer()),
-                  new ProfileTile(
-                    title: "Task.im",
-                    subtitle: "I'm Possibility",
-                    textColor: Colors.white,
+                    ],
                   ),
-                  new IconButton(
-                    icon: new Icon(
-                      Icons.more_vert,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      print("hi");
-                    },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      new IconButton(
+                        icon: new Icon(
+                          Icons.more_vert,
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
                   )
                 ],
-              ),
+              )
             ],
           ),
         ),
@@ -50,7 +54,7 @@ class HomePage_ListingsTab extends StatelessWidget {
         child: Card(
           elevation: 10.0,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.fromLTRB(12, 5, 12, 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -208,15 +212,17 @@ class HomePage_ListingsTab extends StatelessWidget {
   Widget build(BuildContext context) {
     deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          LoginBackground(
-            showIcon: false,
+        resizeToAvoidBottomPadding: false,
+        body: Container(
+          child: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              DashboardBackground(
+                showIcon: false,
+              ),
+              allCards(context),
+            ],
           ),
-          allCards(context),
-        ],
-      ),
-    );
+        ));
   }
 }
