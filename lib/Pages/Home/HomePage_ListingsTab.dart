@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:task.im/Helpers/Dashboard_Helper.dart';
 import 'package:task.im/Style/theme.dart' as Theme;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:task.im/services/ListingManager.dart';
 
 class HomePage_ListingsTab extends StatelessWidget {
   Size deviceSize;
+
   Widget appBarColumn(BuildContext context) => SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 18.0),
@@ -135,46 +137,51 @@ class HomePage_ListingsTab extends StatelessWidget {
         ),
       );
 
-  Widget balanceCard() => Padding(
+  Widget balanceCard(BuildContext context) => Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Card(
-          elevation: 2.0,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      "Task",
-                      style: TextStyle(fontFamily: Theme.Fonts.ralewayFont),
-                    ),
-                    Material(
-                      color: Colors.black,
-                      shape: StadiumBorder(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "500 Meters",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: Theme.Fonts.ralewayFont),
-                        ),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pushNamed("/explore");
+          },
+          child: Card(
+            elevation: 2.0,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "Task",
+                        style: TextStyle(fontFamily: Theme.Fonts.ralewayFont),
                       ),
-                    )
-                  ],
-                ),
-                Text(
-                  "₹ 1000",
-                  style: TextStyle(
-                      fontFamily: Theme.Fonts.ralewayFont,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.green,
-                      fontSize: 25.0),
-                ),
-              ],
+                      Material(
+                        color: Colors.black,
+                        shape: StadiumBorder(),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "500 Meters",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: Theme.Fonts.ralewayFont),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Text(
+                    "₹ 1000",
+                    style: TextStyle(
+                        fontFamily: Theme.Fonts.ralewayFont,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.green,
+                        fontSize: 25.0),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -196,14 +203,12 @@ class HomePage_ListingsTab extends StatelessWidget {
             SizedBox(
               height: deviceSize.height * 0.01,
             ),
-            balanceCard(),
-            balanceCard(),
-            balanceCard(),
-            balanceCard(),
-            balanceCard(),
-            balanceCard(),
-            balanceCard(),
-            balanceCard(),
+            balanceCard(context),
+            balanceCard(context),
+            balanceCard(context),
+            balanceCard(context),
+            balanceCard(context),
+            balanceCard(context),
           ],
         ),
       );
