@@ -5,6 +5,7 @@ import 'package:task.im/Style/theme.dart' as Theme;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task.im/services/ListingManager.dart';
 import "package:pull_to_refresh/pull_to_refresh.dart";
+import 'package:task.im/Helpers/ListingHelpers.dart';
 import 'dart:math' as math;
 
 class HomePage_ListingsTab extends StatefulWidget {
@@ -41,7 +42,7 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
                   slivers: <Widget>[
                     AppBarRegion(context),
                     SearchBarRegion(),
-                    CategoryBarRegion(),
+                    MenuBarRegion(context),
 
                     SliverPadding(
                       sliver: FeaturedListings(),
@@ -119,68 +120,87 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
     );
   }
 
-  Container ListingTile_Square(String title, String description,
-          String location, String price, Color color) =>
-      Container(
-        child: Padding(
-          padding: EdgeInsets.all(2.0),
-          child: Card(
-              elevation: 3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(4),
-                              topRight: Radius.circular(4)),
-                          child: Container(
-                              color: color,
-                              child: Padding(
-                                padding: EdgeInsets.all(5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: <Widget>[
-                                    Text(
-                                      price,
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: Colors.white70,
-                                          fontFamily: Theme.Fonts.quickBoldFont,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  ],
-                                ),
-                              )),
+  SliverPersistentHeader MenuBarRegion(BuildContext context) {
+    return SliverPersistentHeader(
+      delegate: _SliverAppBarDelegate(
+        minHeight: 200,
+        maxHeight: 75,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Card(
+                elevation: 5.0,
+                child: Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            LabelBelowIcon(
+                              circleColor: Colors.blue,
+                              label: "Electrical",
+                              icon: FontAwesomeIcons.plug,
+                              onPressed: () {
+                                Navigator.of(context).pushNamed('/explore');
+                              },
+                            ),
+                            LabelBelowIcon(
+                              circleColor: Colors.orange,
+                              label: "Mechanical",
+                              icon: FontAwesomeIcons.broadcastTower,
+                            ),
+                            LabelBelowIcon(
+                              circleColor: Colors.purple,
+                              label: "Masonary",
+                              icon: FontAwesomeIcons.building,
+                            ),
+                            LabelBelowIcon(
+                              circleColor: Colors.deepPurple,
+                              label: "Carpentry",
+                              icon: FontAwesomeIcons.chair,
+                            ),
+                          ],
                         ),
-                        height: 130,
-                        color: Colors.transparent,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          title,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontFamily: Theme.Fonts.quickBoldFont,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600),
+                        Divider(),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            LabelBelowIcon(
+                              circleColor: Colors.cyan,
+                              label: "Pickup",
+                              icon: Icons.location_on,
+                            ),
+                            LabelBelowIcon(
+                              circleColor: Colors.pinkAccent,
+                              label: "Ride",
+                              icon: Icons.location_on,
+                            ),
+                            LabelBelowIcon(
+                              circleColor: Colors.pink,
+                              label: "Art",
+                              icon: Icons.location_on,
+                            ),
+                            LabelBelowIcon(
+                              circleColor: Colors.brown,
+                              label: "Charity",
+                              icon: Icons.location_on,
+                            ),
+                          ],
                         ),
-                      )
-                    ],
-                  ),
-                ],
-              )),
+                      ],
+                    )),
+              ),
+            )
+          ],
         ),
-      );
+      ),
+    );
+  }
 
   SliverPersistentHeader CategoryBarRegion() {
     return SliverPersistentHeader(

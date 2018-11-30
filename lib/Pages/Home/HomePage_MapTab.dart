@@ -16,7 +16,7 @@ class _HomePage_MapTabState extends State<HomePage_MapTab>
       options: GoogleMapOptions(
           myLocationEnabled: true,
           cameraPosition:
-              CameraPosition(target: LatLng(23.4241, 53.300), zoom: 10.0),
+              CameraPosition(target: LatLng(24.454700, 54.377180), zoom: 10.0),
           scrollGesturesEnabled: true,
           rotateGesturesEnabled: true),
     );

@@ -84,7 +84,7 @@ class LabelBelowIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => onPressed,
+      onTap: onPressed,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -110,7 +110,10 @@ class LabelBelowIcon extends StatelessWidget {
           Text(
             label,
             textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: Theme.Fonts.ralewayFont),
+            style: TextStyle(
+                fontFamily: Theme.Fonts.ralewayFont,
+                fontSize: 11,
+                fontWeight: FontWeight.w600),
           )
         ],
       ),
