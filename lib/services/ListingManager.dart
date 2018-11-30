@@ -28,7 +28,7 @@ class ListingManager {
   }
 
   Future getListing() async {
-    return Firestore.instance.collection('listings').getDocuments();
+    return await Firestore.instance.collection('listings').getDocuments();
   }
 
   updateData(selectedDoc, newValues) {

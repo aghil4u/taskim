@@ -4,11 +4,28 @@ import 'package:task.im/Helpers/Dashboard_Helper.dart';
 import 'package:task.im/Style/theme.dart' as Theme;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task.im/services/ListingManager.dart';
+import "package:pull_to_refresh/pull_to_refresh.dart";
 import 'dart:math' as math;
 
-class HomePage_ListingsTab extends StatelessWidget {
+class HomePage_ListingsTab extends StatefulWidget {
+  _HomePage_ListingsTabState createState() => _HomePage_ListingsTabState();
+}
+
+class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
+  Size deviceSize;
+  var ListingsData;
+  ListingManager manager;
+
+  @override
+  void initState() {
+    manager = ListingManager();
+    _onRefresh(true);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    deviceSize = MediaQuery.of(context).size;
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         body: Container(
@@ -18,45 +35,41 @@ class HomePage_ListingsTab extends StatelessWidget {
               DashboardBackground(
                 showIcon: false,
               ),
-              CollapsingList(),
+              SafeArea(
+                child: CustomScrollView(
+                  physics: BouncingScrollPhysics(),
+                  slivers: <Widget>[
+                    AppBarRegion(context),
+                    SearchBarRegion(),
+                    CategoryBarRegion(),
+                    ListingsRegion(),
+                  ],
+                ),
+              ),
             ],
           ),
         ));
   }
-}
-
-class CollapsingList extends StatelessWidget {
-  Size deviceSize;
-
-  @override
-  Widget build(BuildContext context) {
-    deviceSize = MediaQuery.of(context).size;
-    return SafeArea(
-      child: CustomScrollView(
-        physics: BouncingScrollPhysics(),
-        slivers: <Widget>[
-          AppBarRegion(context),
-          SearchBarRegion(),
-          CategoryBarRegion(),
-          ListingsRegion(),
-        ],
-      ),
-    );
-  }
 
   SliverFixedExtentList ListingsRegion() {
     return SliverFixedExtentList(
-      itemExtent: 150.0,
-      delegate: SliverChildListDelegate(
-        [
-          Container(color: Colors.red),
-          Container(color: Colors.purple),
-          Container(color: Colors.green),
-          Container(color: Colors.orange),
-          Container(color: Colors.yellow),
-        ],
-      ),
-    );
+        itemExtent: 800.0,
+        delegate: SliverChildListDelegate(<Widget>[
+          // SmartRefresher(
+          //     enablePullDown: true,
+          //     enablePullUp: true,
+          //     onRefresh: _onRefresh,
+          //onOffsetChange: _onOffsetCallback,
+          // child:
+          new ListView.builder(
+            // itemExtent: 1.0,
+            itemCount: ListingsData.documents.length,
+            itemBuilder: (context, index) {
+              return ListingCard(context, ListingsData.documents[index].data);
+            },
+          )
+          // )
+        ]));
   }
 
   SliverPersistentHeader CategoryBarRegion() {
@@ -225,7 +238,7 @@ class CollapsingList extends StatelessWidget {
     );
   }
 
-  Widget balanceCard(BuildContext context) => Padding(
+  Widget ListingCard(BuildContext context, data) => Padding(
         padding: const EdgeInsets.all(8.0),
         child: GestureDetector(
           onTap: () {
@@ -242,31 +255,16 @@ class CollapsingList extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        "Task",
-                        style: TextStyle(fontFamily: Theme.Fonts.ralewayFont),
+                        data["Title"],
+                        style: TextStyle(fontFamily: Theme.Fonts.quickBoldFont),
                       ),
-                      Material(
-                        color: Colors.black,
-                        shape: StadiumBorder(),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "500 Meters",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: Theme.Fonts.ralewayFont),
-                          ),
-                        ),
-                      )
                     ],
                   ),
                   Text(
-                    "₹ 1000",
+                    data["Description"],
                     style: TextStyle(
-                        fontFamily: Theme.Fonts.ralewayFont,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.green,
-                        fontSize: 25.0),
+                      fontFamily: Theme.Fonts.quickFont,
+                    ),
                   ),
                 ],
               ),
@@ -274,6 +272,14 @@ class CollapsingList extends StatelessWidget {
           ),
         ),
       );
+
+  void _onRefresh(bool up) {
+    manager.getListing().then((onValue) {
+      setState(() {
+        ListingsData = onValue;
+      });
+    });
+  }
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {

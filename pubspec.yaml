@@ -13,6 +13,7 @@ dependencies:
   cloud_firestore:
   firebase_storage:
   image_picker:
+  pull_to_refresh: ^1.1.6
 
   cupertino_icons: ^0.1.2
 
