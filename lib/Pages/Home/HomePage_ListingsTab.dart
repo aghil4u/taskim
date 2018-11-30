@@ -18,8 +18,8 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
 
   @override
   void initState() {
-    manager = ListingManager();
-    _onRefresh(true);
+    // manager = ListingManager();
+    // _onRefresh(true);
     super.initState();
   }
 
@@ -42,7 +42,12 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
                     AppBarRegion(context),
                     SearchBarRegion(),
                     CategoryBarRegion(),
-                    ListingsRegion(),
+
+                    SliverPadding(
+                      sliver: FeaturedListings(),
+                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    ),
+                    // ListingsRegion(),
                   ],
                 ),
               ),
@@ -71,6 +76,111 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
           // )
         ]));
   }
+
+  SliverGrid FeaturedListings() {
+    return SliverGrid.count(
+      crossAxisCount: 2,
+      childAspectRatio: .9,
+      mainAxisSpacing: 5.0,
+      children: [
+        ListingTile_Square(
+            "Title can be as long as it wants! however it will get cut off at some point",
+            "Description Goes here",
+            "Location",
+            '800 USD',
+            Colors.blue),
+        ListingTile_Square("Title can be as long as it wants!",
+            "Description Goes here", "Location", '800 USD', Colors.purple),
+        ListingTile_Square("Title can be as long as it wants!",
+            "Description Goes here", "Location", '800 USD', Colors.green),
+        ListingTile_Square("Title can be as long as it wants!",
+            "Description Goes here", "Location", '800 USD', Colors.orange),
+        ListingTile_Square("Title can be as long as it wants!",
+            "Description Goes here", "Location", '800 USD', Colors.yellow),
+        ListingTile_Square("Title can be as long as it wants!",
+            "Description Goes here", "Location", '800 USD', Colors.pink),
+        ListingTile_Square(
+            "Title can be as long as it wants! however it will get cut off at some point",
+            "Description Goes here",
+            "Location",
+            '800 USD',
+            Colors.blue),
+        ListingTile_Square("Title can be as long as it wants!",
+            "Description Goes here", "Location", '800 USD', Colors.purple),
+        ListingTile_Square("Title can be as long as it wants!",
+            "Description Goes here", "Location", '800 USD', Colors.green),
+        ListingTile_Square("Title can be as long as it wants!",
+            "Description Goes here", "Location", '800 USD', Colors.orange),
+        ListingTile_Square("Title can be as long as it wants!",
+            "Description Goes here", "Location", '800 USD', Colors.yellow),
+        ListingTile_Square("Title can be as long as it wants!",
+            "Description Goes here", "Location", '800 USD', Colors.pink),
+      ],
+    );
+  }
+
+  Container ListingTile_Square(String title, String description,
+          String location, String price, Color color) =>
+      Container(
+        child: Padding(
+          padding: EdgeInsets.all(2.0),
+          child: Card(
+              elevation: 3,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(4),
+                              topRight: Radius.circular(4)),
+                          child: Container(
+                              color: color,
+                              child: Padding(
+                                padding: EdgeInsets.all(5),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: <Widget>[
+                                    Text(
+                                      price,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: Colors.white70,
+                                          fontFamily: Theme.Fonts.quickBoldFont,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                        ),
+                        height: 130,
+                        color: Colors.transparent,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          title,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontFamily: Theme.Fonts.quickBoldFont,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              )),
+        ),
+      );
 
   SliverPersistentHeader CategoryBarRegion() {
     return SliverPersistentHeader(
