@@ -124,7 +124,7 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
     return SliverPersistentHeader(
       delegate: _SliverAppBarDelegate(
         minHeight: 200,
-        maxHeight: 75,
+        maxHeight: 210,
         child: Column(
           children: <Widget>[
             Padding(
@@ -165,7 +165,9 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
                             ),
                           ],
                         ),
-                        Divider(),
+                        Divider(
+                          height: 25.0,
+                        ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
