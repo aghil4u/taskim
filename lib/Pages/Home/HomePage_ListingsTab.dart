@@ -14,6 +14,42 @@ class HomePage_ListingsTab extends StatefulWidget {
 
 class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
   Size deviceSize;
+  var manager = ListingManager();
+  List items = new List();
+  ScrollController _scrollController = new ScrollController();
+  bool isPerformingRequest = false;
+
+  @override
+  void initState() {
+    manager = new ListingManager();
+    manager.FetchDocuments().then((onValue) {
+      setState(() {
+        items = onValue;
+      });
+    });
+
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        if (!isPerformingRequest) {
+          setState(() => isPerformingRequest = true);
+          manager.FetchDocumentsFromLast().then((onValue) {
+            setState(() {
+              items = onValue;
+              isPerformingRequest = false;
+            });
+          });
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,25 +63,60 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
               DashboardBackground(
                 showIcon: false,
               ),
-              SafeArea(
-                child: CustomScrollView(
-                  physics: BouncingScrollPhysics(),
-                  slivers: <Widget>[
-                    AppBarRegion(context),
-                    SearchBarRegion(),
-                    MenuBarRegion(context),
-                    Header(context, "Featured Listings"),
-                    SliverPadding(
-                      sliver: FeaturedListings(),
-                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+              FutureBuilder(
+                future: manager.FetchDocuments(),
+                builder: (context, snapshot) {
+                  return SafeArea(
+                    child: CustomScrollView(
+                      controller: _scrollController,
+                      physics: BouncingScrollPhysics(),
+                      slivers: <Widget>[
+                        AppBarRegion(context),
+                        SearchBarRegion(),
+                        MenuBarRegion(context),
+                        Header(context, "Featured Listings"),
+                        Listings()
+
+                        // ListingsRegion(),
+                      ],
                     ),
-                    // ListingsRegion(),
-                  ],
-                ),
+                  );
+                },
               ),
             ],
           ),
         ));
+  }
+
+  SliverList Listings() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+        if (index == items.length) {
+          return _buildProgressIndicator();
+        } else {
+          return ListTile(
+            title: ListingTile_Regular(
+                items[index].data["Title"],
+                items[index].data["Description"],
+                "location",
+                items[index].data["Renumeration"],
+                Colors.blue),
+          );
+        }
+      }, childCount: items.length + 1),
+    );
+  }
+
+  Widget _buildProgressIndicator() {
+    return new Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: new Center(
+        child: new Opacity(
+          opacity: isPerformingRequest ? 1.0 : 0.0,
+          child: new CircularProgressIndicator(),
+        ),
+      ),
+    );
   }
 
   SliverGrid FeaturedListings() {
