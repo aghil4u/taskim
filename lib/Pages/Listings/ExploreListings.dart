@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task.im/services/ListingManager.dart';
+import 'package:task.im/Helpers/ListingHelpers.dart';
 
 class ExploreListings extends StatefulWidget {
   @override
@@ -12,6 +13,10 @@ class _ListingsContainerState extends State<ExploreListings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.pink,
+        title: Text("Explore"),
+      ),
       body: Listings(),
     );
   }
@@ -21,14 +26,23 @@ class _ListingsContainerState extends State<ExploreListings> {
       future: manager.getListing(),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
+          return Center(
+            child: RefreshProgressIndicator(),
+          );
         }
         if (snapshot.connectionState == ConnectionState.done) {
+          List c = snapshot.data.documents;
           return ListView.builder(
-            itemCount: 2,
+            physics: BouncingScrollPhysics(),
+            itemCount: c.length,
             itemBuilder: (_, index) {
               return ListTile(
-                title: Text(snapshot.data.documents[index].data["Title"]),
+                title: ListingTile_Regular(
+                    c[index].data["Title"],
+                    c[index].data["Description"],
+                    "location",
+                    "500 AED",
+                    Colors.blue),
               );
             },
           );
