@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: LoginPage(),
       theme: ThemeData(primarySwatch: Colors.blue),
       routes: <String, WidgetBuilder>{
         '/landingpage': (BuildContext context) => new MyApp(),

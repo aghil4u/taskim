@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'dart:math' as math;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:task.im/Helpers/CustomBottomAppBar.dart';
 import 'HomePage_ListingsTab.dart';
@@ -57,10 +57,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           manager.AddListing({
+            'TimeStamp': DateTime.now().toUtc().year.toString() +
+                DateTime.now().toUtc().month.toString() +
+                DateTime.now().toUtc().day.toString() +
+                DateTime.now().toUtc().hour.toString() +
+                DateTime.now().toUtc().minute.toString() +
+                DateTime.now().toUtc().second.toString() +
+                math.Random().nextInt(1000).toString(),
             'User': "Test User",
             'Lat': "24.334459",
             'Lon': "54.510480",
-            'Title': "Some random Title " + DateTime.now().day.toString(),
+            'Renumeration': math.Random().nextInt(1000).toString() + " AED",
+            'Title': "Listing Created at " +
+                DateTime.now().day.toString() +
+                DateTime.now().hour.toString() +
+                DateTime.now().minute.toString(),
             'Description':
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ... The first word, “Lorem,” isn't even a word; instead it's a piece of the word “dolorem,” meaning pain, suffering, or sorrow."
           }).then((result) {

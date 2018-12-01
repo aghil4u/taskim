@@ -9,6 +9,41 @@ class ExploreListings extends StatefulWidget {
 
 class _ListingsContainerState extends State<ExploreListings> {
   var manager = ListingManager();
+  List items = new List();
+  ScrollController _scrollController = new ScrollController();
+  bool isPerformingRequest = false;
+
+  @override
+  void initState() {
+    manager = new ListingManager();
+    manager.FetchDocuments().then((onValue) {
+      setState(() {
+        items = onValue;
+      });
+    });
+
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        if (!isPerformingRequest) {
+          setState(() => isPerformingRequest = true);
+          manager.FetchDocumentsFromLast().then((onValue) {
+            setState(() {
+              items = onValue;
+              isPerformingRequest = false;
+            });
+          });
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,31 +58,40 @@ class _ListingsContainerState extends State<ExploreListings> {
 
   Listings() {
     return FutureBuilder(
-      future: manager.getListing(),
-      builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: RefreshProgressIndicator(),
-          );
-        }
-        if (snapshot.connectionState == ConnectionState.done) {
-          List c = snapshot.data.documents;
-          return ListView.builder(
-            physics: BouncingScrollPhysics(),
-            itemCount: c.length,
-            itemBuilder: (_, index) {
+      future: manager.FetchDocuments(),
+      builder: (context, snapshot) {
+        return ListView.builder(
+          controller: _scrollController,
+          physics: BouncingScrollPhysics(),
+          itemCount: items.length + 1,
+          itemBuilder: (_, index) {
+            if (index == items.length) {
+              return _buildProgressIndicator();
+            } else {
               return ListTile(
                 title: ListingTile_Regular(
-                    c[index].data["Title"],
-                    c[index].data["Description"],
+                    items[index].data["Title"],
+                    items[index].data["Description"],
                     "location",
-                    "500 AED",
+                    items[index].data["Renumeration"],
                     Colors.blue),
               );
-            },
-          );
-        }
+            }
+          },
+        );
       },
+    );
+  }
+
+  Widget _buildProgressIndicator() {
+    return new Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: new Center(
+        child: new Opacity(
+          opacity: isPerformingRequest ? 1.0 : 0.0,
+          child: new CircularProgressIndicator(),
+        ),
+      ),
     );
   }
 }
