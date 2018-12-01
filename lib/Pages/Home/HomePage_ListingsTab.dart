@@ -14,15 +14,6 @@ class HomePage_ListingsTab extends StatefulWidget {
 
 class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
   Size deviceSize;
-  var ListingsData;
-  ListingManager manager;
-
-  @override
-  void initState() {
-    // manager = ListingManager();
-    // _onRefresh(true);
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +34,7 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
                     AppBarRegion(context),
                     SearchBarRegion(),
                     MenuBarRegion(context),
-
+                    Header(context, "Featured Listings"),
                     SliverPadding(
                       sliver: FeaturedListings(),
                       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -57,27 +48,6 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
         ));
   }
 
-  SliverFixedExtentList ListingsRegion() {
-    return SliverFixedExtentList(
-        itemExtent: 800.0,
-        delegate: SliverChildListDelegate(<Widget>[
-          // SmartRefresher(
-          //     enablePullDown: true,
-          //     enablePullUp: true,
-          //     onRefresh: _onRefresh,
-          //onOffsetChange: _onOffsetCallback,
-          // child:
-          new ListView.builder(
-            // itemExtent: 1.0,
-            itemCount: ListingsData.documents.length,
-            itemBuilder: (context, index) {
-              return ListingCard(context, ListingsData.documents[index].data);
-            },
-          )
-          // )
-        ]));
-  }
-
   SliverGrid FeaturedListings() {
     return SliverGrid.count(
       crossAxisCount: 2,
@@ -89,34 +59,39 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
             "Description Goes here",
             "Location",
             '800 USD',
-            Colors.blue),
+            Colors.grey),
         ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.purple),
+            "Description Goes here", "Location", '800 USD', Colors.grey),
         ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.green),
+            "Description Goes here", "Location", '800 USD', Colors.grey),
         ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.orange),
+            "Description Goes here", "Location", '800 USD', Colors.grey),
         ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.yellow),
+            "Description Goes here", "Location", '800 USD', Colors.grey),
         ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.pink),
-        ListingTile_Square(
-            "Title can be as long as it wants! however it will get cut off at some point",
-            "Description Goes here",
-            "Location",
-            '800 USD',
-            Colors.blue),
-        ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.purple),
-        ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.green),
-        ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.orange),
-        ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.yellow),
-        ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.pink),
+            "Description Goes here", "Location", '800 USD', Colors.grey),
       ],
+    );
+  }
+
+  SliverPersistentHeader Header(BuildContext context, String HeaderText) {
+    return SliverPersistentHeader(
+      delegate: _SliverAppBarDelegate(
+          minHeight: 50,
+          maxHeight: 50,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(20, 10, 20, 5),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  HeaderText,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600, color: Colors.black54),
+                ),
+                Divider()
+              ],
+            ),
+          )),
     );
   }
 
@@ -404,14 +379,6 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
           ),
         ),
       );
-
-  void _onRefresh(bool up) {
-    manager.getListing().then((onValue) {
-      setState(() {
-        ListingsData = onValue;
-      });
-    });
-  }
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
