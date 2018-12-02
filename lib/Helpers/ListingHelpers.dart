@@ -88,7 +88,6 @@ Container ListingTile_Regular(String title, String description, String location,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           fontFamily: Theme.Fonts.quickBoldFont,
-                          fontSize: 13,
                           fontWeight: FontWeight.w600),
                     ),
                     Divider(
@@ -100,7 +99,7 @@ Container ListingTile_Regular(String title, String description, String location,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontFamily: Theme.Fonts.quickNormalFont,
-                        fontSize: 11,
+                        fontSize: 13,
                       ),
                     ),
                   ],

@@ -80,8 +80,29 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             print(e);
           });
         },
-        child: Icon(Icons.add),
-        backgroundColor: Theme.Colors.loginGradientStart,
+        child: Ink(
+          decoration: new BoxDecoration(
+            gradient: new LinearGradient(
+                colors: Theme.iColors.kitGradients,
+                begin: const FractionalOffset(0.0, 0.0),
+                end: const FractionalOffset(2.0, 2.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp),
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+
+              // builder
+            ],
+          ),
+        ),
+        clipBehavior: Clip.antiAlias,
+        backgroundColor: Theme.iColors.loginGradientStart,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       // bottomNavigationBar: new CustomBottomAppBar(

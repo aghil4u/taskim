@@ -63,8 +63,8 @@ class _LoginPageState extends State<LoginPage>
             decoration: new BoxDecoration(
               gradient: new LinearGradient(
                   colors: [
-                    Theme.Colors.loginGradientStart,
-                    Theme.Colors.loginGradientEnd
+                    Theme.iColors.loginGradientStart,
+                    Theme.iColors.loginGradientEnd
                   ],
                   begin: const FractionalOffset(0.0, 0.0),
                   end: const FractionalOffset(1.0, 1.0),
@@ -321,12 +321,12 @@ class _LoginPageState extends State<LoginPage>
                       //   blurRadius: 20.0,
                       // ),
                       BoxShadow(
-                        color: Theme.Colors.loginGradientEnd,
+                        color: Theme.iColors.loginGradientEnd,
                         offset: Offset(0.0, 10.0),
                         blurRadius: 20.0,
                       ),
                     ],
-                    color: Theme.Colors.loginGradientEnd
+                    color: Theme.iColors.loginGradientEnd
                     // gradient: new LinearGradient(
                     //     colors: [
                     //       Theme.Colors.loginGradientEnd,
@@ -339,7 +339,7 @@ class _LoginPageState extends State<LoginPage>
                     ),
                 child: MaterialButton(
                   highlightColor: Colors.transparent,
-                  splashColor: Theme.Colors.loginGradientEnd,
+                  splashColor: Theme.iColors.loginGradientEnd,
                   //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -643,12 +643,12 @@ class _LoginPageState extends State<LoginPage>
                       //   blurRadius: 20.0,
                       // ),
                       BoxShadow(
-                        color: Theme.Colors.loginGradientEnd,
+                        color: Theme.iColors.loginGradientEnd,
                         offset: Offset(1.0, 10.0),
                         blurRadius: 10.0,
                       ),
                     ],
-                    color: Theme.Colors.loginGradientEnd
+                    color: Theme.iColors.loginGradientEnd
                     // gradient: new LinearGradient(
                     //     colors: [
                     //       Theme.Colors.loginGradientEnd,

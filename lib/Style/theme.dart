@@ -1,8 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-class Colors {
-  const Colors();
+class iColors {
+  const iColors();
 
   static const Color loginGradientStart = const Color.fromRGBO(234, 44, 109, 1);
 
@@ -16,6 +16,8 @@ class Colors {
     begin: Alignment.topRight,
     end: Alignment.bottomLeft,
   );
+
+  static List<Color> kitGradients = [loginGradientStart, loginGradientEnd];
 }
 
 class Fonts {

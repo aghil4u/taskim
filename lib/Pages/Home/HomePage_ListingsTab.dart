@@ -7,6 +7,7 @@ import 'package:task.im/services/ListingManager.dart';
 import "package:pull_to_refresh/pull_to_refresh.dart";
 import 'package:task.im/Helpers/ListingHelpers.dart';
 import 'dart:math' as math;
+import 'package:task.im/Pages/Listings/ListingDetailsPage.dart';
 
 class HomePage_ListingsTab extends StatefulWidget {
   _HomePage_ListingsTabState createState() => _HomePage_ListingsTabState();
@@ -18,6 +19,8 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
   List items = new List();
   ScrollController _scrollController = new ScrollController();
   bool isPerformingRequest = false;
+  var _dashbgxpos = -1.0;
+  bool animateHeader = false;
 
   @override
   void initState() {
@@ -30,6 +33,15 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
 
     super.initState();
     _scrollController.addListener(() {
+      if (animateHeader &&
+          _scrollController.position.pixels < 500 &&
+          _scrollController.position.pixels > 0) {
+        setState(() {
+          _dashbgxpos = _scrollController.position.pixels * -1.2;
+          // scrollpos = _scrollController.position.pixels.toString();
+        });
+      }
+
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         if (!isPerformingRequest) {
@@ -54,14 +66,18 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
   @override
   Widget build(BuildContext context) {
     deviceSize = MediaQuery.of(context).size;
+
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         body: Container(
           child: Stack(
             fit: StackFit.expand,
             children: <Widget>[
-              DashboardBackground(
-                showIcon: false,
+              Positioned.fill(
+                top: _dashbgxpos,
+                child: DashboardBackground(
+                  showIcon: false,
+                ),
               ),
               FutureBuilder(
                 future: manager.FetchDocuments(),
@@ -94,13 +110,24 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
         if (index == items.length) {
           return _buildProgressIndicator();
         } else {
-          return ListTile(
-            title: ListingTile_Regular(
-                items[index].data["Title"],
-                items[index].data["Description"],
-                "location",
-                items[index].data["Renumeration"],
-                Colors.blue),
+          return GestureDetector(
+            child: ListTile(
+              title: ListingTile_Regular(
+                  items[index].data["Title"],
+                  items[index].data["Description"],
+                  "location",
+                  items[index].data["Renumeration"],
+                  Colors.blue),
+            ),
+            onTap: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //       builder: (context) => ListingDetailsPage(
+              //             listing: items[index],
+              //           )),
+              // );
+            },
           );
         }
       }, childCount: items.length + 1),
