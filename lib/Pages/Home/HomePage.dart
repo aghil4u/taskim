@@ -6,6 +6,7 @@ import 'HomePage_ListingsTab.dart';
 import 'HomePage_MapTab.dart';
 import 'package:task.im/Style/theme.dart' as Theme;
 import 'package:task.im/services/ListingManager.dart';
+import 'package:task.im/Pages/Listings/CreateListing.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -56,30 +57,32 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          manager.AddListing({
-            'Date': DateTime.now().toUtc().toIso8601String(),
-            'TimeStamp': DateTime.now().toUtc().year.toString() +
-                DateTime.now().toUtc().month.toString() +
-                DateTime.now().toUtc().day.toString() +
-                DateTime.now().toUtc().hour.toString() +
-                DateTime.now().toUtc().minute.toString() +
-                DateTime.now().toUtc().second.toString() +
-                math.Random().nextInt(1000).toString(),
-            'User': "Test User",
-            'Lat': "24.334459",
-            'Lon': "54.510480",
-            'Renumeration': math.Random().nextInt(1000).toString() + " AED",
-            'Title': "Listing Created at " +
-                DateTime.now().day.toString() +
-                DateTime.now().hour.toString() +
-                DateTime.now().minute.toString(),
-            'Description':
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ... The first word, “Lorem,” isn't even a word; instead it's a piece of the word “dolorem,” meaning pain, suffering, or sorrow."
-          }).then((result) {
-            showInSnackBar(result.toString());
-          }).catchError((e) {
-            print(e);
-          });
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => CreateListing()));
+          // manager.AddListing({
+          //   'Date': DateTime.now().toUtc().toIso8601String(),
+          //   'TimeStamp': DateTime.now().toUtc().year.toString() +
+          //       DateTime.now().toUtc().month.toString() +
+          //       DateTime.now().toUtc().day.toString() +
+          //       DateTime.now().toUtc().hour.toString() +
+          //       DateTime.now().toUtc().minute.toString() +
+          //       DateTime.now().toUtc().second.toString() +
+          //       math.Random().nextInt(1000).toString(),
+          //   'User': "Test User",
+          //   'Lat': "24.334459",
+          //   'Lon': "54.510480",
+          //   'Renumeration': math.Random().nextInt(1000).toString() + " AED",
+          //   'Title': "Listing Created at " +
+          //       DateTime.now().day.toString() +
+          //       DateTime.now().hour.toString() +
+          //       DateTime.now().minute.toString(),
+          //   'Description':
+          //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ... The first word, “Lorem,” isn't even a word; instead it's a piece of the word “dolorem,” meaning pain, suffering, or sorrow."
+          // }).then((result) {
+          //   showInSnackBar(result.toString());
+          // }).catchError((e) {
+          //   print(e);
+          // });
         },
         child: Ink(
           decoration: new BoxDecoration(
@@ -104,6 +107,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
         clipBehavior: Clip.antiAlias,
         backgroundColor: Theme.iColors.loginGradientStart,
+        heroTag: "FabTag",
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       // bottomNavigationBar: new CustomBottomAppBar(

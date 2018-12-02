@@ -6,8 +6,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task.im/services/ListingManager.dart';
 import "package:pull_to_refresh/pull_to_refresh.dart";
 import 'package:task.im/Helpers/ListingHelpers.dart';
+import 'package:task.im/Helpers/Search.dart';
 import 'dart:math' as math;
 import 'package:task.im/Pages/Listings/ListingDetailsPage.dart';
+import 'package:task.im/Helpers/CustomShowSearch.dart' as x;
 
 class HomePage_ListingsTab extends StatefulWidget {
   _HomePage_ListingsTabState createState() => _HomePage_ListingsTabState();
@@ -117,15 +119,15 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
                   items[index].data["Description"],
                   "location",
                   items[index].data["Renumeration"],
-                  Colors.blue),
+                  Colors.blue,
+                  index),
             ),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => ListingDetailsPage(
-                          listing: items[index],
-                        )),
+                        listing: items[index], index: index)),
               );
             },
           );
@@ -143,32 +145,6 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
           child: new RefreshProgressIndicator(),
         ),
       ),
-    );
-  }
-
-  SliverGrid FeaturedListings() {
-    return SliverGrid.count(
-      crossAxisCount: 2,
-      childAspectRatio: .9,
-      mainAxisSpacing: 5.0,
-      children: [
-        ListingTile_Square(
-            "Title can be as long as it wants! however it will get cut off at some point",
-            "Description Goes here",
-            "Location",
-            '800 USD',
-            Colors.grey),
-        ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.grey),
-        ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.grey),
-        ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.grey),
-        ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.grey),
-        ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.grey),
-      ],
     );
   }
 
@@ -277,78 +253,6 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
     );
   }
 
-  SliverPersistentHeader CategoryBarRegion() {
-    return SliverPersistentHeader(
-      pinned: false,
-      delegate: _SliverAppBarDelegate(
-        minHeight: 220.0,
-        maxHeight: 75.0,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Card(
-                elevation: 5.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        DashboardMenuRow(
-                          firstIcon: FontAwesomeIcons.solidUser,
-                          firstLabel: "Carpentery",
-                          firstIconCircleColor: Colors.blue,
-                          secondIcon: FontAwesomeIcons.userFriends,
-                          secondLabel: "Masonary",
-                          secondIconCircleColor: Colors.orange,
-                          thirdIcon: FontAwesomeIcons.mapMarkerAlt,
-                          thirdLabel: "Delivery",
-                          thirdIconCircleColor: Colors.purple,
-                          fourthIcon: FontAwesomeIcons.locationArrow,
-                          fourthLabel: "Electrical",
-                          fourthIconCircleColor: Colors.indigo,
-                        ),
-                        // DashboardMenuRow(
-                        //   firstIcon: FontAwesomeIcons.images,
-                        //   firstLabel: "Albums",
-                        //   firstIconCircleColor: Colors.red,
-                        //   secondIcon: FontAwesomeIcons.solidHeart,
-                        //   secondLabel: "Likes",
-                        //   secondIconCircleColor: Colors.teal,
-                        //   thirdIcon: FontAwesomeIcons.solidNewspaper,
-                        //   thirdLabel: "Articles",
-                        //   thirdIconCircleColor: Colors.lime,
-                        //   fourthIcon: FontAwesomeIcons.solidCommentDots,
-                        //   fourthLabel: "Reviews",
-                        //   fourthIconCircleColor: Colors.amber,
-                        // ),
-                        DashboardMenuRow(
-                          firstIcon: FontAwesomeIcons.footballBall,
-                          firstLabel: "Coding",
-                          firstIconCircleColor: Colors.cyan,
-                          secondIcon: FontAwesomeIcons.solidStar,
-                          secondLabel: "Random",
-                          secondIconCircleColor: Colors.redAccent,
-                          thirdIcon: FontAwesomeIcons.blogger,
-                          thirdLabel: "Misc",
-                          thirdIconCircleColor: Colors.pink,
-                          fourthIcon: FontAwesomeIcons.wallet,
-                          fourthLabel: "Charity",
-                          fourthIconCircleColor: Colors.brown,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
   SliverPersistentHeader SearchBarRegion() {
     return SliverPersistentHeader(
       pinned: true,
@@ -375,6 +279,10 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: "Find Tasks near me"),
+                          onTap: () {
+                            x.showSearch(
+                                context: context, delegate: ListingSearch());
+                          },
                         ),
                       ),
                       Icon(Icons.my_location),
@@ -429,6 +337,7 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
                               Icons.more_vert,
                               color: Colors.white,
                             ),
+                            onPressed: () {},
                           )
                         ],
                       )

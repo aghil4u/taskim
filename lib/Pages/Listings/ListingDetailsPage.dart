@@ -11,10 +11,12 @@ import 'package:task.im/Pages/Listings/ListingDetailsPage.dart';
 
 class ListingDetailsPage extends StatefulWidget {
   final listing;
+  final int index;
 
-  const ListingDetailsPage({Key key, this.listing}) : super(key: key);
+  const ListingDetailsPage({Key key, this.listing, this.index})
+      : super(key: key);
   _ListingDetailsPageState createState() =>
-      _ListingDetailsPageState(this.listing);
+      _ListingDetailsPageState(this.listing, this.index);
 }
 
 class _ListingDetailsPageState extends State<ListingDetailsPage> {
@@ -23,7 +25,7 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
 
   ScrollController _scrollController = new ScrollController();
 
-  _ListingDetailsPageState(listing);
+  _ListingDetailsPageState(listing, int index);
 
   @override
   Widget build(BuildContext context) {
@@ -166,84 +168,87 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
             color: Colors.transparent,
             child: Padding(
               padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child: Card(
-                elevation: 3.0,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Text(
-                        widget.listing.data["Title"],
-                        style: TextStyle(
-                            fontFamily: Theme.Fonts.ralewayFont,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      Divider(
-                        height: 20,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    FontAwesomeIcons.locationArrow,
-                                    size: 10,
-                                  ),
-                                  Text(
-                                    "  " +
-                                        widget.listing.data["Lat"] +
-                                        " KM away",
-                                    style: TextStyle(
-                                        fontFamily: Theme.Fonts.ralewayFont,
-                                        fontSize: 10),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    FontAwesomeIcons.calendar,
-                                    size: 10,
-                                  ),
-                                  Divider(
-                                    height: 29,
-                                  ),
-                                  Text(
-                                    "  " +
-                                        widget.listing.data["Lat"] +
-                                        " Days Before",
-                                    style: TextStyle(
-                                        fontFamily: Theme.Fonts.ralewayFont,
-                                        fontSize: 10),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              Text(
-                                widget.listing.data["Renumeration"],
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.lightGreen,
-                                    fontFamily: Theme.Fonts.quickFont,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ],
+              child: Hero(
+                tag: "ListingTag" + widget.index.toString(),
+                child: Card(
+                  elevation: 3.0,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Text(
+                          widget.listing.data["Title"],
+                          style: TextStyle(
+                              fontFamily: Theme.Fonts.ralewayFont,
+                              fontWeight: FontWeight.w700),
+                        ),
+                        Divider(
+                          height: 20,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      FontAwesomeIcons.locationArrow,
+                                      size: 10,
+                                    ),
+                                    Text(
+                                      "  " +
+                                          widget.listing.data["Lat"] +
+                                          " KM away",
+                                      style: TextStyle(
+                                          fontFamily: Theme.Fonts.ralewayFont,
+                                          fontSize: 10),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      FontAwesomeIcons.calendar,
+                                      size: 10,
+                                    ),
+                                    Divider(
+                                      height: 29,
+                                    ),
+                                    Text(
+                                      "  " +
+                                          widget.listing.data["Lat"] +
+                                          " Days Before",
+                                      style: TextStyle(
+                                          fontFamily: Theme.Fonts.ralewayFont,
+                                          fontSize: 10),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                Text(
+                                  widget.listing.data["Renumeration"],
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.lightGreen,
+                                      fontFamily: Theme.Fonts.quickFont,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
