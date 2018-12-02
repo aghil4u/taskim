@@ -1,6 +1,8 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:task.im/Helpers/Dashboard_Helper.dart';
+import 'package:task.im/Helpers/Navigation.dart';
 import 'package:task.im/Style/theme.dart' as Theme;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task.im/services/ListingManager.dart';
@@ -194,7 +196,9 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
                               label: "Electrical",
                               icon: FontAwesomeIcons.plug,
                               onPressed: () {
-                                Navigator.of(context).pushNamed('/explore');
+                                Navigation.router.navigateTo(
+                                    context, '/explore',
+                                    transition: TransitionType.fadeIn);
                               },
                             ),
                             LabelBelowIcon(

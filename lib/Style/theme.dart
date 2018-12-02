@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class iColors {
   const iColors();
@@ -18,6 +19,12 @@ class iColors {
   );
 
   static List<Color> kitGradients = [loginGradientStart, loginGradientEnd];
+}
+
+class Format {
+  static final DateFormat StandardDateFormat = DateFormat('dd/MM/yy');
+  static final DateFormat StandardDateAndTimeFormat =
+      DateFormat('dd/MM/yy hh:mm aaa');
 }
 
 class Fonts {

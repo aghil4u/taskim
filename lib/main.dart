@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task.im/Helpers/Navigation.dart';
 import 'Style/theme.dart' as Theme;
 import 'Pages/Home/HomePage.dart';
 import 'Pages/LoginPage.dart';
@@ -8,6 +9,10 @@ import 'Pages/Listings/ExploreListings.dart';
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
+  MyApp() {
+    Navigation.initPaths();
+  }
+
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -20,6 +25,7 @@ class MyApp extends StatelessWidget {
         '/selectpic': (BuildContext context) => new SelectprofilepicPage(),
         '/explore': (BuildContext context) => new ExploreListings()
       },
+      onGenerateRoute: Navigation.router.generator,
     );
   }
 }

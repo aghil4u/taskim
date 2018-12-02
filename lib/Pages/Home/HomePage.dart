@@ -1,7 +1,9 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:task.im/Helpers/CustomBottomAppBar.dart';
+import 'package:task.im/Helpers/Navigation.dart';
 import 'HomePage_ListingsTab.dart';
 import 'HomePage_MapTab.dart';
 import 'package:task.im/Style/theme.dart' as Theme;
@@ -57,8 +59,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => CreateListing()));
+          Navigation.router.navigateTo(context, '/CreteLisitng',
+              transition: TransitionType.fadeIn);
+          // Navigator.push(context,
+          //     MaterialPageRoute(builder: (context) => CreateListing()));
           // manager.AddListing({
           //   'Date': DateTime.now().toUtc().toIso8601String(),
           //   'TimeStamp': DateTime.now().toUtc().year.toString() +
