@@ -120,13 +120,13 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
                   Colors.blue),
             ),
             onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) => ListingDetailsPage(
-              //             listing: items[index],
-              //           )),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ListingDetailsPage(
+                          listing: items[index],
+                        )),
+              );
             },
           );
         }
@@ -136,11 +136,11 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
 
   Widget _buildProgressIndicator() {
     return new Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(20.0),
       child: new Center(
         child: new Opacity(
           opacity: isPerformingRequest ? 1.0 : 0.0,
-          child: new CircularProgressIndicator(),
+          child: new RefreshProgressIndicator(),
         ),
       ),
     );

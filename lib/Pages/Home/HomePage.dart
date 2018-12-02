@@ -57,6 +57,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           manager.AddListing({
+            'Date': DateTime.now().toUtc().toIso8601String(),
             'TimeStamp': DateTime.now().toUtc().year.toString() +
                 DateTime.now().toUtc().month.toString() +
                 DateTime.now().toUtc().day.toString() +
