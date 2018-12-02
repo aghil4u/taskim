@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task.im/Helpers/Navigation.dart';
-import 'Style/theme.dart' as Theme;
+import 'Style/Style.dart' as Theme;
 import 'Pages/Home/HomePage.dart';
 import 'Pages/LoginPage.dart';
 import 'selectprofpic.dart';

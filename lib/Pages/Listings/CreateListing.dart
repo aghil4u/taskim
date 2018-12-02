@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:task.im/Style/theme.dart' as iTheme;
+import 'package:task.im/Style/Style.dart' as iTheme;
 import 'package:task.im/services/ListingManager.dart';
 
 class CreateListingPage extends StatefulWidget {
@@ -10,19 +10,31 @@ class CreateListingPage extends StatefulWidget {
   _CreateListingPageState createState() => _CreateListingPageState();
 }
 
-class _CreateListingPageState extends State<CreateListingPage> {
-  Size deviceSize;
-  var manager = ListingManager();
-  var _fromdate =
+class _CreateListingPageState extends State<CreateListingPage>
+    with AutomaticKeepAliveClientMixin {
+//-----------------------------------
+  TextEditingController _titleFieldController;
+  String _listingTitle = "";
+  String _fromdate =
       iTheme.Format.StandardDateFormat.format(DateTime.now()).toString();
-  var _todate = iTheme.Format.StandardDateFormat
+  String _todate = iTheme.Format.StandardDateFormat
       .format(DateTime.now().add(Duration(days: 5)))
       .toString();
-  var _dateType = "before";
-  var _dateType2 = "to";
+  String _dateType = "before";
+  String _dateType2 = "to";
+  String _currency = "USD";
   bool date2Visibility = false;
-  final PageController _pvc = PageController(initialPage: 0);
+//------------------------------------
 
+  void initState() {
+    super.initState();
+    _titleFieldController = new TextEditingController();
+    _titleFieldController.text = _listingTitle;
+  }
+
+  Size deviceSize;
+  var manager = ListingManager();
+  final PageController _pvc = PageController(initialPage: 0);
   ScrollController _scrollController = new ScrollController();
 
   @override
@@ -44,9 +56,9 @@ class _CreateListingPageState extends State<CreateListingPage> {
                 controller: _pvc,
                 children: <Widget>[
                   TitlePage(),
+                  RenumerationPage(),
                   DescriptionPage(),
                   LocationPage(),
-                  RenumerationPage(),
                   PreviewPage()
                 ],
               )),
@@ -63,8 +75,8 @@ class _CreateListingPageState extends State<CreateListingPage> {
         decoration: new BoxDecoration(
           gradient: new LinearGradient(
               colors: [
-                iTheme.iColors.loginGradientStart,
-                iTheme.iColors.loginGradientEnd
+                iTheme.Pigments.loginGradientStart,
+                iTheme.Pigments.loginGradientEnd
               ],
               begin: const FractionalOffset(0.0, 0.0),
               end: const FractionalOffset(1.0, 1.0),
@@ -85,13 +97,17 @@ class _CreateListingPageState extends State<CreateListingPage> {
               ),
               Container(
                 child: TextField(
-                    maxLength: 200,
-                    autocorrect: true,
-                    maxLines: 1,
-                    autofocus: true,
-                    cursorColor: Colors.white,
-                    textCapitalization: TextCapitalization.characters,
-                    style: _dts()),
+                  controller: _titleFieldController,
+                  maxLength: 200,
+                  autocorrect: true,
+                  maxLines: 1,
+                  cursorColor: Colors.white,
+                  textCapitalization: TextCapitalization.characters,
+                  style: _dts(),
+                  onEditingComplete: () {
+                    _listingTitle = _titleFieldController.text;
+                  },
+                ),
               ),
               Row(
                 children: <Widget>[
@@ -224,10 +240,12 @@ class _CreateListingPageState extends State<CreateListingPage> {
 
   Future _selectDate(var datetoset) async {
     DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: new DateTime.now(),
-        firstDate: new DateTime(2016),
-        lastDate: new DateTime(2019));
+      context: context,
+      initialDate: new DateTime.now(),
+      firstDate: new DateTime.now(),
+      lastDate: new DateTime(2020),
+    );
+
     if (picked != null)
       setState(() => datetoset =
           iTheme.Format.StandardDateFormat.format(picked).toString());
@@ -235,13 +253,102 @@ class _CreateListingPageState extends State<CreateListingPage> {
 
   Widget RenumerationPage() {
     return Container(
-      color: Colors.amber,
-      child: Center(
-          child: Text(
-        "PAGE1",
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-      )),
-    );
+        decoration: new BoxDecoration(
+          gradient: new LinearGradient(
+              colors: [
+                iTheme.Pigments.Gradient2Start,
+                iTheme.Pigments.Gradient2End
+              ],
+              begin: const FractionalOffset(0.0, 0.0),
+              end: const FractionalOffset(1.0, 1.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(30),
+          child: Center(
+              child: Wrap(
+            children: <Widget>[
+              Text(
+                "I'M WILLING TO SPEND",
+                style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 40.0,
+                    color: Colors.white),
+              ),
+              Row(
+                children: <Widget>[
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      value: _currency,
+                      iconSize: 30,
+                      items: [
+                        DropdownMenuItem(
+                          value: "USD",
+                          child: Text(
+                            "USD",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                                color: Colors.grey[400]),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: "AED",
+                          child: Text(
+                            "AED",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                                color: Colors.grey[400]),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: "INR",
+                          child: Text(
+                            "INR",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                                color: Colors.grey[400]),
+                          ),
+                        )
+                      ],
+                      onChanged: (String i) {
+                        setState(() {
+                          _currency = i;
+                          // if (i == "from") {
+                          //   date2Visibility = true;
+                          // } else {
+                          //   date2Visibility = false;
+                          // }
+                        });
+                      },
+                      style: _dts(),
+                    ),
+                  ),
+                  Container(
+                    width: 70,
+                    child: TextField(
+                        textAlign: TextAlign.center,
+                        autocorrect: true,
+                        maxLines: 1,
+                        cursorColor: Colors.white,
+                        keyboardType: TextInputType.numberWithOptions(),
+                        style: _dts()),
+                  ),
+                  Text(
+                    "FOR THIS TASK",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 20.0,
+                        color: Colors.white),
+                  ),
+                ],
+              ),
+            ],
+          )),
+        ));
   }
 
   Widget DescriptionPage() {
@@ -276,4 +383,8 @@ class _CreateListingPageState extends State<CreateListingPage> {
       )),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

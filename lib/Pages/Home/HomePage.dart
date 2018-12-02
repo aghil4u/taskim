@@ -6,7 +6,7 @@ import 'package:task.im/Helpers/CustomBottomAppBar.dart';
 import 'package:task.im/Helpers/Navigation.dart';
 import 'HomePage_ListingsTab.dart';
 import 'HomePage_MapTab.dart';
-import 'package:task.im/Style/theme.dart' as Theme;
+import 'package:task.im/Style/Style.dart' as Theme;
 import 'package:task.im/services/ListingManager.dart';
 import 'package:task.im/Pages/Listings/CreateListing.dart';
 
@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: Ink(
           decoration: new BoxDecoration(
             gradient: new LinearGradient(
-                colors: Theme.iColors.kitGradients,
+                colors: Theme.Pigments.kitGradients,
                 begin: const FractionalOffset(0.0, 0.0),
                 end: const FractionalOffset(2.0, 2.0),
                 stops: [0.0, 1.0],
@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
         ),
         clipBehavior: Clip.antiAlias,
-        backgroundColor: Theme.iColors.loginGradientStart,
+        backgroundColor: Theme.Pigments.loginGradientStart,
         heroTag: "FabTag",
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

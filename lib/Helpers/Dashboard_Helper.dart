@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task.im/Style/theme.dart' as Theme;
+import 'package:task.im/Style/Style.dart' as Theme;
 
 class DashboardMenuRow extends StatelessWidget {
   final firstLabel;
@@ -131,8 +131,8 @@ class DashboardBackground extends StatelessWidget {
     // new Color.fromRGBO(0, 122, 193, 1.0),
     // Colors.blueGrey.shade800,
     // Colors.black87,
-    Theme.iColors.loginGradientStart,
-    Theme.iColors.loginGradientEnd,
+    Theme.Pigments.loginGradientStart,
+    Theme.Pigments.loginGradientEnd,
   ];
 
   DashboardBackground({this.showIcon = true, this.image});

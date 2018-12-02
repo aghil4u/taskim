@@ -2,12 +2,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class iColors {
-  const iColors();
+class Pigments {
+  const Pigments();
 
   static const Color loginGradientStart = const Color.fromRGBO(234, 44, 109, 1);
-
   static const Color loginGradientEnd = const Color.fromRGBO(100, 0, 400, 1);
+
+  static const Color Gradient2Start = const Color.fromRGBO(200, 0, 200, 1);
+  static const Color Gradient2End = const Color.fromRGBO(0, 0, 400, 1);
 
   static const Color PrimaryColor = const Color.fromRGBO(100, 0, 400, 1);
 

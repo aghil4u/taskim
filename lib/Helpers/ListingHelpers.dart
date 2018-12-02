@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task.im/Style/theme.dart' as Theme;
+import 'package:task.im/Style/Style.dart' as Theme;
 
 Container ListingTile_Square(String title, String description, String location,
         String price, Color color) =>

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:task.im/Style/theme.dart' as Theme;
+import 'package:task.im/Style/Style.dart' as Theme;
 import 'package:task.im/Helpers/LoginPageBubble.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:task.im/services/usermanagement.dart';
@@ -63,8 +63,8 @@ class _LoginPageState extends State<LoginPage>
             decoration: new BoxDecoration(
               gradient: new LinearGradient(
                   colors: [
-                    Theme.iColors.loginGradientStart,
-                    Theme.iColors.loginGradientEnd
+                    Theme.Pigments.loginGradientStart,
+                    Theme.Pigments.loginGradientEnd
                   ],
                   begin: const FractionalOffset(0.0, 0.0),
                   end: const FractionalOffset(1.0, 1.0),
@@ -321,12 +321,12 @@ class _LoginPageState extends State<LoginPage>
                       //   blurRadius: 20.0,
                       // ),
                       BoxShadow(
-                        color: Theme.iColors.loginGradientEnd,
+                        color: Theme.Pigments.loginGradientEnd,
                         offset: Offset(0.0, 10.0),
                         blurRadius: 20.0,
                       ),
                     ],
-                    color: Theme.iColors.loginGradientEnd
+                    color: Theme.Pigments.loginGradientEnd
                     // gradient: new LinearGradient(
                     //     colors: [
                     //       Theme.Colors.loginGradientEnd,
@@ -339,7 +339,7 @@ class _LoginPageState extends State<LoginPage>
                     ),
                 child: MaterialButton(
                   highlightColor: Colors.transparent,
-                  splashColor: Theme.iColors.loginGradientEnd,
+                  splashColor: Theme.Pigments.loginGradientEnd,
                   //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -643,12 +643,12 @@ class _LoginPageState extends State<LoginPage>
                       //   blurRadius: 20.0,
                       // ),
                       BoxShadow(
-                        color: Theme.iColors.loginGradientEnd,
+                        color: Theme.Pigments.loginGradientEnd,
                         offset: Offset(1.0, 10.0),
                         blurRadius: 10.0,
                       ),
                     ],
-                    color: Theme.iColors.loginGradientEnd
+                    color: Theme.Pigments.loginGradientEnd
                     // gradient: new LinearGradient(
                     //     colors: [
                     //       Theme.Colors.loginGradientEnd,
