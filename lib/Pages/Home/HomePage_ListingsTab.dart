@@ -6,12 +6,12 @@ import 'package:task.im/Helpers/Navigation.dart';
 import 'package:task.im/Style/Style.dart' as Theme;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task.im/services/ListingManager.dart';
-import "package:pull_to_refresh/pull_to_refresh.dart";
 import 'package:task.im/Helpers/ListingHelpers.dart';
 import 'package:task.im/Helpers/Search.dart';
 import 'dart:math' as math;
 import 'package:task.im/Pages/Listings/ListingDetailsPage.dart';
 import 'package:task.im/Helpers/CustomShowSearch.dart' as x;
+import 'package:permission_handler/permission_handler.dart';
 
 class HomePage_ListingsTab extends StatefulWidget {
   _HomePage_ListingsTabState createState() => _HomePage_ListingsTabState();
@@ -69,6 +69,7 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
 
   @override
   Widget build(BuildContext context) {
+    CheckLocationPermissions();
     deviceSize = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -420,5 +421,16 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     return maxHeight != oldDelegate.maxHeight ||
         minHeight != oldDelegate.minHeight ||
         child != oldDelegate.child;
+  }
+}
+
+Future<void> CheckLocationPermissions() async {
+  PermissionStatus permission = await PermissionHandler()
+      .checkPermissionStatus(PermissionGroup.locationWhenInUse);
+
+  if (permission != PermissionStatus.granted) {
+    Map<PermissionGroup, PermissionStatus> permissions =
+        await PermissionHandler()
+            .requestPermissions([PermissionGroup.locationWhenInUse]);
   }
 }

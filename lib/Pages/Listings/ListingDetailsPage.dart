@@ -4,7 +4,6 @@ import 'package:task.im/Helpers/Dashboard_Helper.dart';
 import 'package:task.im/Style/Style.dart' as Theme;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task.im/services/ListingManager.dart';
-import "package:pull_to_refresh/pull_to_refresh.dart";
 import 'package:task.im/Helpers/ListingHelpers.dart';
 import 'dart:math' as math;
 import 'package:task.im/Pages/Listings/ListingDetailsPage.dart';

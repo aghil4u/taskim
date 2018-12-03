@@ -15,6 +15,10 @@ class _CreateListingPageState extends State<CreateListingPage>
 //-----------------------------------
   TextEditingController _titleFieldController;
   String _listingTitle = "";
+  TextEditingController _renumerationFieldController;
+  String _listingRenumeration = "";
+  TextEditingController _descriptionFieldController;
+  String _listingDescription = "";
   String _fromdate =
       iTheme.Format.StandardDateFormat.format(DateTime.now()).toString();
   String _todate = iTheme.Format.StandardDateFormat
@@ -30,6 +34,10 @@ class _CreateListingPageState extends State<CreateListingPage>
     super.initState();
     _titleFieldController = new TextEditingController();
     _titleFieldController.text = _listingTitle;
+    _renumerationFieldController = new TextEditingController();
+    _renumerationFieldController.text = _listingRenumeration;
+    _descriptionFieldController = new TextEditingController();
+    _descriptionFieldController.text = _listingDescription;
   }
 
   Size deviceSize;
@@ -98,7 +106,7 @@ class _CreateListingPageState extends State<CreateListingPage>
               Container(
                 child: TextField(
                   controller: _titleFieldController,
-                  maxLength: 200,
+                  maxLength: 150,
                   autocorrect: true,
                   maxLines: 1,
                   cursorColor: Colors.white,
@@ -330,11 +338,16 @@ class _CreateListingPageState extends State<CreateListingPage>
                   Container(
                     width: 70,
                     child: TextField(
+                        controller: _renumerationFieldController,
                         textAlign: TextAlign.center,
                         autocorrect: true,
                         maxLines: 1,
                         cursorColor: Colors.white,
                         keyboardType: TextInputType.numberWithOptions(),
+                        onEditingComplete: () {
+                          _listingRenumeration =
+                              _renumerationFieldController.text;
+                        },
                         style: _dts()),
                   ),
                   Text(
@@ -353,13 +366,44 @@ class _CreateListingPageState extends State<CreateListingPage>
 
   Widget DescriptionPage() {
     return Container(
-      color: Colors.amber,
-      child: Center(
-          child: Text(
-        "PAGE1",
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-      )),
-    );
+        decoration: new BoxDecoration(
+          gradient: new LinearGradient(
+              colors: [
+                iTheme.Pigments.Gradient3Start,
+                iTheme.Pigments.Gradient3End
+              ],
+              begin: const FractionalOffset(0.0, 0.0),
+              end: const FractionalOffset(1.0, 1.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(30),
+          child: Center(
+              child: Wrap(
+            children: <Widget>[
+              Text(
+                "FURTHER DETAILS ",
+                style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 40.0,
+                    color: Colors.white),
+              ),
+              Container(
+                child: TextField(
+                    controller: _descriptionFieldController,
+                    textAlign: TextAlign.left,
+                    autocorrect: true,
+                    maxLines: 10,
+                    cursorColor: Colors.white,
+                    onEditingComplete: () {
+                      _listingDescription = _descriptionFieldController.text;
+                    },
+                    style: _dts()),
+              ),
+            ],
+          )),
+        ));
   }
 
   Widget LocationPage() {

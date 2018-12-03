@@ -11,6 +11,9 @@ class Pigments {
   static const Color Gradient2Start = const Color.fromRGBO(200, 0, 200, 1);
   static const Color Gradient2End = const Color.fromRGBO(0, 0, 400, 1);
 
+  static const Color Gradient3Start = const Color.fromRGBO(500, 100, 0, 1);
+  static const Color Gradient3End = const Color.fromRGBO(400, 0, 100, 1);
+
   static const Color PrimaryColor = const Color.fromRGBO(100, 0, 400, 1);
 
   static const primaryGradient = const LinearGradient(

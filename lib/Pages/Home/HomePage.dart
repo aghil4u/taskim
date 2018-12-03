@@ -130,6 +130,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       //   ),
       // ),
       body: new TabBarView(
+        physics: BouncingScrollPhysics(),
         controller: tabController,
         children: <Widget>[HomePage_ListingsTab(), HomePage_MapTab()],
       ),
