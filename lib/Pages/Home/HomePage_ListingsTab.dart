@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:task.im/Helpers/Dashboard_Helper.dart';
 import 'package:task.im/Helpers/Navigation.dart';
-import 'package:task.im/Style/Style.dart' as Theme;
+import 'package:task.im/Style/Style.dart' as Style;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task.im/services/ListingManager.dart';
 import 'package:task.im/Helpers/ListingHelpers.dart';
@@ -128,7 +128,7 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
+                Style.FadePageRoute(
                     builder: (context) => ListingDetailsPage(
                         listing: items[index], index: index)),
               );
@@ -175,13 +175,16 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
   SliverPersistentHeader MenuBarRegion(BuildContext context) {
     return SliverPersistentHeader(
       delegate: _SliverAppBarDelegate(
-        minHeight: 200,
-        maxHeight: 210,
+        minHeight: 220,
+        maxHeight: 220,
         child: Column(
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
                 elevation: 5.0,
                 child: Padding(
                     padding: const EdgeInsets.all(25.0),
@@ -220,7 +223,7 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
                           ],
                         ),
                         Divider(
-                          height: 25.0,
+                          height: 35.0,
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -269,6 +272,9 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
                 elevation: 10.0,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 5, 12, 5),
@@ -375,14 +381,14 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
                     children: <Widget>[
                       Text(
                         data["Title"],
-                        style: TextStyle(fontFamily: Theme.Fonts.quickBoldFont),
+                        style: TextStyle(fontFamily: Style.Fonts.quickBoldFont),
                       ),
                     ],
                   ),
                   Text(
                     data["Description"],
                     style: TextStyle(
-                      fontFamily: Theme.Fonts.quickFont,
+                      fontFamily: Style.Fonts.quickFont,
                     ),
                   ),
                 ],

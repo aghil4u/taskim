@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:task.im/Helpers/Dashboard_Helper.dart';
-import 'package:task.im/Style/Style.dart' as Theme;
+import 'package:task.im/Style/Style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task.im/services/ListingManager.dart';
 import 'package:task.im/Helpers/ListingHelpers.dart';
@@ -51,9 +52,9 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
                       slivers: <Widget>[
                         AppBarRegion(context),
                         TitleBarRegion(),
-                        PhotosRegion(context),
-                        DescriptionRegion(context),
+                        DescriptionRegion(),
                         MapRegion(context),
+                        PhotosRegion(context),
                         Header(context, "Similar Listings"),
                         FeaturedListings()
 
@@ -129,130 +130,218 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
     );
   }
 
-  SliverPersistentHeader DescriptionRegion(BuildContext context) {
-    return SliverPersistentHeader(
-      delegate: _SliverAppBarDelegate(
-          minHeight: 150,
-          maxHeight: 150,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: Card(
-              elevation: 3,
+  SliverList DescriptionRegion() {
+    return SliverList(
+        delegate: SliverChildListDelegate([
+      Padding(
+        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+        child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
             ),
-          )),
-    );
+            elevation: 3,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: Text(
+                    "TASK DESCRIPTION",
+                    style: Fonts.S2,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Divider(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 30),
+                  child: Text(
+                    widget.listing.data["Description"] +
+                        widget.listing.data["Description"],
+                    // style: Fonts.S2,
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+              ],
+            )),
+      )
+    ]));
   }
 
-  SliverPersistentHeader MapRegion(BuildContext context) {
-    return SliverPersistentHeader(
-      delegate: _SliverAppBarDelegate(
-          minHeight: 150,
-          maxHeight: 150,
-          child: Padding(
+  SliverList MapRegion(BuildContext context) {
+    double lat = double.tryParse(widget.listing.data["Lat"]);
+    double lon = double.tryParse(widget.listing.data["Lon"]);
+
+    if (lat != null && lon != null) {
+      return SliverList(
+        delegate: SliverChildListDelegate([
+          Padding(
             padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
               elevation: 3,
+              child: Container(
+                  height: 200,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(8),
+                        bottomRight: Radius.circular(8),
+                        topLeft: Radius.circular(8),
+                        topRight: Radius.circular(8)),
+                    child: GoogleMap(
+                      options: GoogleMapOptions(
+                        cameraPosition: CameraPosition(
+                            target: LatLng(lat, lon), zoom: 12.0),
+                      ),
+                      onMapCreated: (GoogleMapController controller) {
+                        controller.addMarker(
+                            MarkerOptions(position: LatLng(lat, lon)));
+                      },
+                    ),
+                  )),
             ),
-          )),
-    );
+          )
+        ]),
+      );
+    } else {
+      return SliverList(delegate: SliverChildListDelegate([]));
+    }
   }
 
   SliverPersistentHeader TitleBarRegion() {
     return SliverPersistentHeader(
       pinned: true,
       delegate: _SliverAppBarDelegate(
-        minHeight: 125.0,
-        maxHeight: 125.0,
-        child: Container(
-            color: Colors.transparent,
+          minHeight: 115.0,
+          maxHeight: 205.0,
+          child: SafeArea(
+            top: true,
             child: Padding(
-              padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child: Hero(
-                tag: "ListingTag" + widget.index.toString(),
-                child: Card(
-                  elevation: 3.0,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Text(
-                          widget.listing.data["Title"],
-                          style: TextStyle(
-                              fontFamily: Theme.Fonts.ralewayFont,
-                              fontWeight: FontWeight.w700),
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Hero(
+                    tag: "ListingTag" + widget.index.toString(),
+                    child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                        Divider(
-                          height: 20,
+                        elevation: 3,
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 10,
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Icon(
-                                      FontAwesomeIcons.locationArrow,
-                                      size: 10,
+                        child: Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Column(
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  Expanded(
+                                      child: Container(
+                                    height: 61,
+                                    child: Text(
+                                      //widget.listing.data["Title"],
+                                      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa",
+                                      maxLines: 3,
+                                      softWrap: true,
+                                      style: Fonts.T1,
                                     ),
-                                    Text(
-                                      "  " +
-                                          widget.listing.data["Lat"] +
-                                          " KM away",
-                                      style: TextStyle(
-                                          fontFamily: Theme.Fonts.ralewayFont,
-                                          fontSize: 10),
+                                    alignment: Alignment(0, 0),
+                                  )),
+                                  //VerticalDivider(),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          widget.listing.data["Renumeration"],
+                                          style: Fonts.N1,
+                                        ),
+                                        Divider(
+                                          height: 4,
+                                        ),
+                                        Text(
+                                          "NEGOTIABLE",
+                                          style: Fonts.S2,
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Icon(
-                                      FontAwesomeIcons.calendar,
-                                      size: 10,
+                                  )
+                                ],
+                              ),
+                              Divider(
+                                height: 30,
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Icon(FontAwesomeIcons.star),
+                                        Divider(
+                                          height: 20,
+                                        ),
+                                        Text(
+                                          "SKILL LEVEL 1",
+                                          style: Fonts.S3,
+                                          textAlign: TextAlign.center,
+                                        )
+                                      ],
                                     ),
-                                    Divider(
-                                      height: 29,
+                                  ),
+                                  VerticalDivider(),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Icon(FontAwesomeIcons.calendarAlt),
+                                        Divider(
+                                          height: 20,
+                                        ),
+                                        Text(
+                                          "POSTED 5 DAYS BEFORE",
+                                          style: Fonts.S3,
+                                          textAlign: TextAlign.center,
+                                        )
+                                      ],
                                     ),
-                                    Text(
-                                      "  " +
-                                          widget.listing.data["Lat"] +
-                                          " Days Before",
-                                      style: TextStyle(
-                                          fontFamily: Theme.Fonts.ralewayFont,
-                                          fontSize: 10),
+                                  ),
+                                  VerticalDivider(),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Icon(FontAwesomeIcons.mapMarkedAlt),
+                                        Divider(
+                                          height: 20,
+                                        ),
+                                        Text(
+                                          "WITH IN 50 KILOMETERS",
+                                          style: Fonts.S3,
+                                          textAlign: TextAlign.center,
+                                        )
+                                      ],
                                     ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: <Widget>[
-                                Text(
-                                  widget.listing.data["Renumeration"],
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.lightGreen,
-                                      fontFamily: Theme.Fonts.quickFont,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            )),
-      ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        )))),
+          )),
     );
   }
 
@@ -260,8 +349,8 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
     return SliverPersistentHeader(
       pinned: false,
       delegate: _SliverAppBarDelegate(
-        minHeight: 108.0,
-        maxHeight: 150.0,
+        minHeight: 84.0,
+        maxHeight: 220.0,
         child: Container(
           child: SafeArea(
             child: Padding(

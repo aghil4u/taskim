@@ -33,9 +33,56 @@ class Format {
 }
 
 class Fonts {
+  static final TextStyle T1 = TextStyle(
+      fontFamily: Fonts.ralewayFont, fontWeight: FontWeight.w700, fontSize: 18);
+
+  static final TextStyle S1 =
+      TextStyle(fontFamily: Fonts.ralewayFont, fontSize: 15);
+
+  static final TextStyle S2 = TextStyle(
+      fontFamily: Fonts.ralewayFont,
+      fontSize: 10,
+      letterSpacing: 3,
+      fontWeight: FontWeight.bold);
+
+  static final TextStyle S3 = TextStyle(
+      fontFamily: Fonts.ralewayFont,
+      fontSize: 10,
+      // letterSpacing: 3,
+      fontWeight: FontWeight.bold);
+
+  static final TextStyle N1 = TextStyle(
+      fontSize: 20,
+      color: Colors.purple,
+      fontFamily: Fonts.quickBoldFont,
+      fontWeight: FontWeight.w800);
+
+  static final TextStyle N2 = TextStyle(
+      color: Colors.white70,
+      fontFamily: Fonts.quickBoldFont,
+      fontSize: 15,
+      fontWeight: FontWeight.w700);
+
   static const String quickFont = "Quicksand";
   static const String ralewayFont = "Raleway";
   static const String quickBoldFont = "Quicksand_Bold.otf";
   static const String quickNormalFont = "Quicksand_Book.otf";
   static const String quickLightFont = "Quicksand_Light.otf";
+}
+
+class FadePageRoute<T> extends MaterialPageRoute<T> {
+  FadePageRoute({WidgetBuilder builder, RouteSettings settings})
+      : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    if (settings.isInitialRoute) {
+      return child;
+    }
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  }
 }

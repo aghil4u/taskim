@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task.im/Style/Style.dart' as Theme;
+import 'package:task.im/Style/Style.dart' as Style;
 
 Container ListingTile_Square(String title, String description, String location,
         String price, Color color) =>
@@ -34,7 +34,7 @@ Container ListingTile_Square(String title, String description, String location,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                         color: Colors.white70,
-                                        fontFamily: Theme.Fonts.quickBoldFont,
+                                        fontFamily: Style.Fonts.quickBoldFont,
                                         fontSize: 15,
                                         fontWeight: FontWeight.w700),
                                   ),
@@ -52,7 +52,7 @@ Container ListingTile_Square(String title, String description, String location,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                            fontFamily: Theme.Fonts.quickBoldFont,
+                            fontFamily: Style.Fonts.quickBoldFont,
                             fontSize: 13,
                             fontWeight: FontWeight.w600),
                       ),
@@ -71,6 +71,9 @@ Container ListingTile_Regular(String title, String description, String location,
     child: Hero(
       tag: "ListingTag" + index.toString(),
       child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
           elevation: 3.0,
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
@@ -91,7 +94,7 @@ Container ListingTile_Regular(String title, String description, String location,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontFamily: Theme.Fonts.quickBoldFont,
+                                fontFamily: Style.Fonts.quickBoldFont,
                                 fontWeight: FontWeight.w600),
                           ),
                           Divider(
@@ -102,7 +105,7 @@ Container ListingTile_Regular(String title, String description, String location,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontFamily: Theme.Fonts.quickNormalFont,
+                              fontFamily: Style.Fonts.quickNormalFont,
                               fontSize: 13,
                             ),
                           ),
@@ -116,12 +119,12 @@ Container ListingTile_Regular(String title, String description, String location,
 
                     child: ClipRRect(
                       borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(4),
-                          bottomRight: Radius.circular(4)),
+                          topRight: Radius.circular(8),
+                          bottomRight: Radius.circular(8)),
                       child: Container(
                           color: color,
                           child: Padding(
-                            padding: EdgeInsets.all(5),
+                            padding: EdgeInsets.all(10),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -130,11 +133,7 @@ Container ListingTile_Regular(String title, String description, String location,
                                   price,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color: Colors.white70,
-                                      fontFamily: Theme.Fonts.quickBoldFont,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w700),
+                                  style: Style.Fonts.N2,
                                 ),
                               ],
                             ),
