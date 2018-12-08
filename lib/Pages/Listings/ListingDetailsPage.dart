@@ -22,10 +22,22 @@ class ListingDetailsPage extends StatefulWidget {
 class _ListingDetailsPageState extends State<ListingDetailsPage> {
   Size deviceSize;
   var manager = ListingManager();
+  var map = TempMap();
 
   ScrollController _scrollController = new ScrollController();
 
   _ListingDetailsPageState(listing, int index);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    Future.delayed(Duration(seconds: 2)).then((onValue) {
+      setState(() {
+        map = MapRegion(context);
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +65,8 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
                         AppBarRegion(context),
                         TitleBarRegion(),
                         DescriptionRegion(),
-                        MapRegion(context),
+                        map,
+                        // MapRegion(context),
                         PhotosRegion(context),
                         Header(context, "Similar Listings"),
                         FeaturedListings()
@@ -134,7 +147,7 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
     return SliverList(
         delegate: SliverChildListDelegate([
       Padding(
-        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+        padding: EdgeInsets.fromLTRB(8, 0, 8, 10),
         child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
@@ -169,6 +182,30 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
             )),
       )
     ]));
+  }
+
+  static SliverList TempMap() {
+    return SliverList(
+      delegate: SliverChildListDelegate([
+        Padding(
+          padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            elevation: 3,
+            child: Container(
+                height: 200,
+                child: Center(
+                  child: Text(
+                    "MAP VIEW",
+                    style: Fonts.S2,
+                  ),
+                )),
+          ),
+        )
+      ]),
+    );
   }
 
   SliverList MapRegion(BuildContext context) {
