@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:task.im/Style/Style.dart' as iTheme;
 import 'package:task.im/services/ListingManager.dart';
+import 'dart:math' as math;
 
 class CreateListingPage extends StatefulWidget {
   const CreateListingPage({
@@ -30,6 +31,23 @@ class _CreateListingPageState extends State<CreateListingPage>
   bool date2Visibility = false;
 //------------------------------------
 
+  void showInSnackBar(String value) {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    _scaffoldKey.currentState?.removeCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      content: new Text(
+        value,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.0,
+            fontFamily: iTheme.Fonts.quickBoldFont),
+      ),
+      //backgroundColor: Colors.blue,
+      duration: Duration(seconds: 3),
+    ));
+  }
+
   void initState() {
     super.initState();
     _titleFieldController = new TextEditingController();
@@ -38,18 +56,21 @@ class _CreateListingPageState extends State<CreateListingPage>
     _renumerationFieldController.text = _listingRenumeration;
     _descriptionFieldController = new TextEditingController();
     _descriptionFieldController.text = _listingDescription;
+    _scaffoldKey = GlobalKey();
   }
 
   Size deviceSize;
   var manager = ListingManager();
   final PageController _pvc = PageController(initialPage: 0);
   ScrollController _scrollController = new ScrollController();
+  var _scaffoldKey;
 
   @override
   Widget build(BuildContext context) {
     deviceSize = MediaQuery.of(context).size;
 
     return Scaffold(
+        key: _scaffoldKey,
         resizeToAvoidBottomPadding: true,
         body: Theme(
           data: Theme.of(context).copyWith(
@@ -421,9 +442,64 @@ class _CreateListingPageState extends State<CreateListingPage>
     return Container(
       color: Colors.amber,
       child: Center(
-          child: Text(
-        "PAGE1",
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+          child: Container(
+        margin: EdgeInsets.only(top: 170.0),
+        decoration: new BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: iTheme.Pigments.loginGradientEnd,
+                offset: Offset(0.0, 10.0),
+                blurRadius: 20.0,
+              ),
+            ],
+            color: iTheme.Pigments.loginGradientEnd),
+        child: MaterialButton(
+            highlightColor: Colors.transparent,
+            splashColor: iTheme.Pigments.loginGradientEnd,
+            //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+              child: Text(
+                "POST LISTING",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                    fontFamily: "WorkSansBold"),
+              ),
+            ),
+            onPressed: () {
+              manager.AddListing({
+                'PostingDate': DateTime.now().toUtc().toIso8601String(),
+                'TimeStamp': DateTime.now().toUtc().year.toString() +
+                    DateTime.now().toUtc().month.toString() +
+                    DateTime.now().toUtc().day.toString() +
+                    DateTime.now().toUtc().hour.toString() +
+                    DateTime.now().toUtc().minute.toString() +
+                    DateTime.now().toUtc().second.toString() +
+                    math.Random().nextInt(1000).toString(),
+                'User': "Test User",
+                'Lat': "24." + math.Random().nextInt(500).toString(),
+                'Lon': "54." + math.Random().nextInt(500).toString(),
+                'Renumeration': _renumerationFieldController.text,
+                'Currency': _currency,
+                'Title': _titleFieldController.text,
+                'Description': _descriptionFieldController.text,
+                'FromDate': _fromdate,
+                'ToDate': _todate,
+                'FromDateType': _dateType,
+                'ToDateType': _dateType2,
+              }).then((result) {
+                if (result == true) {
+                  showInSnackBar("Yay! Your Listing is now Live.");
+                } else {
+                  showInSnackBar("Oops! Failed to post your listing.");
+                }
+              }).catchError((e) {
+                print(e);
+              });
+            }),
       )),
     );
   }

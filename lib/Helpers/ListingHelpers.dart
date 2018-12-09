@@ -147,3 +147,22 @@ Container ListingTile_Regular(String title, String description, String location,
     ),
   );
 }
+
+String PostingDateProcessor(data) {
+  var date = DateTime.parse(data).toLocal();
+  String text = "POSTED ON " + Style.Format.StandardDateFormat.format(date);
+  Duration difference = DateTime.now().difference(date);
+  print(difference);
+  if (difference.inDays < 1) {
+    if (difference.inHours < 1) {
+      return "POSTED " + difference.inMinutes.toString() + " MINUTES BEFORE";
+    } else {
+      return "POSTED " + difference.inHours.toString() + " HOURS BEFORE";
+    }
+  }
+  if (difference.inDays < 7) {
+    return "POSTED " + difference.inDays.toString() + " DAYS BEFORE";
+  }
+
+  return text;
+}

@@ -172,9 +172,7 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 10, 16, 30),
                   child: Text(
-                    widget.listing.data["Description"] +
-                        widget.listing.data["Description"],
-                    // style: Fonts.S2,
+                    widget.listing.data["Description"],
                     textAlign: TextAlign.left,
                   ),
                 ),
@@ -283,8 +281,8 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
                                       child: Container(
                                     height: 61,
                                     child: Text(
-                                      //widget.listing.data["Title"],
-                                      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa",
+                                      widget.listing.data["Title"],
+                                      // "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa",
                                       maxLines: 3,
                                       softWrap: true,
                                       style: Fonts.T1,
@@ -348,7 +346,8 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
                                           height: 20,
                                         ),
                                         Text(
-                                          "POSTED 5 DAYS BEFORE",
+                                          PostingDateProcessor(widget
+                                              .listing.data["PostingDate"]),
                                           style: Fonts.S3,
                                           textAlign: TextAlign.center,
                                         )
