@@ -357,7 +357,9 @@ class _LoginPageState extends State<LoginPage>
                     FirebaseAuth.instance
                         .signInWithEmailAndPassword(
                             email: _email, password: _password)
-                        .then((FirebaseUser user) {
+                        .catchError((onError) {
+                      showInSnackBar(onError.toString());
+                    }).then((FirebaseUser user) {
                       Navigator.of(context).pushReplacementNamed('/homepage');
                     }).catchError((e) {
                       print(e);

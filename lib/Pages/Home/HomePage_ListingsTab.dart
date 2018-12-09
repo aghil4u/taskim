@@ -25,6 +25,7 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
   bool isPerformingRequest = false;
   var _dashbgxpos = -1.0;
   bool animateHeader = false;
+  bool initialQuerry = true;
 
   @override
   void initState() {
@@ -95,8 +96,8 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
                         AppBarRegion(context),
                         SearchBarRegion(),
                         MenuBarRegion(context),
-                        Header(context, "Featured Listings"),
-                        Listings()
+                        Header(context, "Latest Listings"),
+                        Listings(snapshot)
 
                         // ListingsRegion(),
                       ],
@@ -109,34 +110,48 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
         ));
   }
 
-  SliverList Listings() {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-        if (index == items.length) {
-          return _buildProgressIndicator();
-        } else {
-          return GestureDetector(
-            child: ListTile(
-              title: ListingTile_Regular(
-                  items[index].data["Title"],
-                  items[index].data["Description"],
-                  "location",
-                  items[index].data["Renumeration"],
-                  Colors.blue,
-                  index),
+  SliverList Listings(AsyncSnapshot snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting && initialQuerry) {
+      return SliverList(
+        delegate: SliverChildListDelegate([
+          Container(
+            height: 100,
+            child: Center(
+              child: RefreshProgressIndicator(),
             ),
-            onTap: () {
-              Navigator.push(
-                context,
-                Style.FadePageRoute(
-                    builder: (context) => ListingDetailsPage(
-                        listing: items[index], index: index)),
-              );
-            },
-          );
-        }
-      }, childCount: items.length + 1),
-    );
+          )
+        ]),
+      );
+    } else {
+      initialQuerry = false;
+      return SliverList(
+        delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+          if (index == items.length) {
+            return _buildProgressIndicator();
+          } else {
+            return GestureDetector(
+              child: ListTile(
+                title: ListingTile_Regular(
+                    items[index].data["Title"],
+                    items[index].data["Description"],
+                    "location",
+                    items[index].data["Renumeration"],
+                    Colors.blue,
+                    index),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  Style.FadePageRoute(
+                      builder: (context) => ListingDetailsPage(
+                          listing: items[index], index: index)),
+                );
+              },
+            );
+          }
+        }, childCount: items.length + 1),
+      );
+    }
   }
 
   Widget _buildProgressIndicator() {

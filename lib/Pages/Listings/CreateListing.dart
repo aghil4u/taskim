@@ -60,7 +60,8 @@ class _CreateListingPageState extends State<CreateListingPage>
   }
 
   Size deviceSize;
-  var manager = ListingManager();
+  ListingManager manager = ListingManager();
+
   final PageController _pvc = PageController(initialPage: 0);
   ScrollController _scrollController = new ScrollController();
   var _scaffoldKey;
@@ -479,7 +480,8 @@ class _CreateListingPageState extends State<CreateListingPage>
                     DateTime.now().toUtc().minute.toString() +
                     DateTime.now().toUtc().second.toString() +
                     math.Random().nextInt(1000).toString(),
-                'User': "Test User",
+                'UserName': manager.CurrentUser.displayName,
+                'UID': manager.CurrentUser.uid,
                 'Lat': "24." + math.Random().nextInt(500).toString(),
                 'Lon': "54." + math.Random().nextInt(500).toString(),
                 'Renumeration': _renumerationFieldController.text,
