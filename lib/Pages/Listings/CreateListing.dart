@@ -1,5 +1,10 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:task.im/Style/Style.dart' as iTheme;
 import 'package:task.im/services/ListingManager.dart';
 import 'dart:math' as math;
@@ -28,6 +33,7 @@ class _CreateListingPageState extends State<CreateListingPage>
   String _dateType = "before";
   String _dateType2 = "to";
   String _currency = "USD";
+  List<String> _listingPhotos = [];
   bool date2Visibility = false;
 //------------------------------------
 
@@ -88,6 +94,7 @@ class _CreateListingPageState extends State<CreateListingPage>
                   TitlePage(),
                   RenumerationPage(),
                   DescriptionPage(),
+                  PhotosPage(),
                   LocationPage(),
                   PreviewPage()
                 ],
@@ -105,8 +112,8 @@ class _CreateListingPageState extends State<CreateListingPage>
         decoration: new BoxDecoration(
           gradient: new LinearGradient(
               colors: [
-                iTheme.Pigments.loginGradientStart,
-                iTheme.Pigments.loginGradientEnd
+                iTheme.Pigments.Gradient1Start,
+                iTheme.Pigments.Gradient1End
               ],
               begin: const FractionalOffset(0.0, 0.0),
               end: const FractionalOffset(1.0, 1.0),
@@ -128,12 +135,16 @@ class _CreateListingPageState extends State<CreateListingPage>
               Container(
                 child: TextField(
                   controller: _titleFieldController,
+                  textInputAction: TextInputAction.done,
                   maxLength: 150,
                   autocorrect: true,
                   maxLines: 1,
                   cursorColor: Colors.white,
                   textCapitalization: TextCapitalization.characters,
                   style: _dts(),
+                  onSubmitted: (value) {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                  },
                   onEditingComplete: () {
                     _listingTitle = _titleFieldController.text;
                   },
@@ -360,6 +371,9 @@ class _CreateListingPageState extends State<CreateListingPage>
                   Container(
                     width: 70,
                     child: TextField(
+                        onSubmitted: (value) {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                        },
                         controller: _renumerationFieldController,
                         textAlign: TextAlign.center,
                         autocorrect: true,
@@ -405,7 +419,7 @@ class _CreateListingPageState extends State<CreateListingPage>
               child: Wrap(
             children: <Widget>[
               Text(
-                "FURTHER DETAILS ",
+                "MORE ABOUT MY REQUIREMENT ",
                 style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontSize: 40.0,
@@ -413,9 +427,12 @@ class _CreateListingPageState extends State<CreateListingPage>
               ),
               Container(
                 child: TextField(
+                    onSubmitted: (value) {
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                    },
                     controller: _descriptionFieldController,
                     textAlign: TextAlign.left,
-                    autocorrect: true,
+                    autocorrect: false,
                     maxLines: 10,
                     cursorColor: Colors.white,
                     onEditingComplete: () {
@@ -423,6 +440,76 @@ class _CreateListingPageState extends State<CreateListingPage>
                     },
                     style: _dts()),
               ),
+            ],
+          )),
+        ));
+  }
+
+  Widget PhotosPage() {
+    return Container(
+        decoration: new BoxDecoration(
+          gradient: new LinearGradient(
+              colors: [
+                iTheme.Pigments.Gradient4Start,
+                iTheme.Pigments.Gradient4End
+              ],
+              begin: const FractionalOffset(0.0, 0.0),
+              end: const FractionalOffset(1.0, 1.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(30),
+          child: Center(
+              child: Wrap(
+            children: <Widget>[
+              Text(
+                "SOME PHOTOS RELATED TO THE TASK ",
+                style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 40.0,
+                    color: Colors.white),
+              ),
+              Container(
+                  height: 200,
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  child: GridView.count(
+                    crossAxisCount: 3,
+                    children: <Widget>[
+                      InkWell(
+                        onTap: () => AddPhotoFromCamera(),
+                        child: Card(
+                          elevation: 10,
+                          color: Colors.white70,
+                          shape: iTheme.Shapes.DefaultCardShape,
+                          child: InkWell(
+                            child: Center(
+                              child: Icon(
+                                Icons.add_a_photo,
+                                size: 50,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () => AddPhotoFromGallery(),
+                        child: Card(
+                          elevation: 10,
+                          color: Colors.white70,
+                          shape: iTheme.Shapes.DefaultCardShape,
+                          child: InkWell(
+                            child: Center(
+                              child: Icon(
+                                Icons.add_photo_alternate,
+                                size: 50,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )),
             ],
           )),
         ));
@@ -492,6 +579,7 @@ class _CreateListingPageState extends State<CreateListingPage>
                 'ToDate': _todate,
                 'FromDateType': _dateType,
                 'ToDateType': _dateType2,
+                'Photos': _listingPhotos
               }).then((result) {
                 if (result == true) {
                   showInSnackBar("Yay! Your Listing is now Live.");
@@ -509,4 +597,34 @@ class _CreateListingPageState extends State<CreateListingPage>
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+
+  AddPhotoFromCamera() async {
+    var tempImage =
+        await ImagePicker.pickImage(source: ImageSource.camera, maxHeight: 500);
+    if (tempImage != null) {
+      uploadImage(tempImage);
+    }
+  }
+
+  AddPhotoFromGallery() async {
+    var tempImage = await ImagePicker.pickImage(
+        source: ImageSource.gallery, maxHeight: 500);
+    if (tempImage != null) {
+      uploadImage(tempImage);
+    }
+  }
+
+  uploadImage(File tempImage) {
+    var randomno = Random().nextInt(50000);
+    final StorageReference firebaseStorageRef = FirebaseStorage.instance
+        .ref()
+        .child('listingImages/${randomno.toString()}.jpg');
+    StorageUploadTask task = firebaseStorageRef.putFile(tempImage);
+
+    task.future.then((value) {
+      _listingPhotos.add(value.downloadUrl.toString());
+    }).catchError((e) {
+      print(e);
+    });
+  }
 }

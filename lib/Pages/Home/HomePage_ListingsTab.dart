@@ -137,6 +137,7 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
                     "location",
                     items[index].data["Renumeration"],
                     Colors.blue,
+                    items[index].data["Photos"],
                     index),
               ),
               onTap: () {

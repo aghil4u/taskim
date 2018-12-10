@@ -65,7 +65,7 @@ Container ListingTile_Square(String title, String description, String location,
     );
 
 Container ListingTile_Regular(String title, String description, String location,
-    String price, Color color, int index) {
+    String price, Color color, List<dynamic> photos, int index) {
   return Container(
     height: 150,
     child: Hero(
@@ -118,27 +118,10 @@ Container ListingTile_Regular(String title, String description, String location,
                     width: constraints.maxHeight,
 
                     child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(8),
-                          bottomRight: Radius.circular(8)),
-                      child: Container(
-                          color: color,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: <Widget>[
-                                Text(
-                                  price,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Style.Fonts.N2,
-                                ),
-                              ],
-                            ),
-                          )),
-                    ),
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(8),
+                            bottomRight: Radius.circular(8)),
+                        child: imageCell(photos, price)),
                   )
                 ],
               );
@@ -146,6 +129,59 @@ Container ListingTile_Regular(String title, String description, String location,
           )),
     ),
   );
+}
+
+imageCell(List<dynamic> photos, String price) {
+  if (photos == null || photos.length < 1) {
+    return Container(
+        color: Colors.blueAccent,
+        child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Stack(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Text(
+                      price,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: Style.Fonts.N2,
+                    ),
+                  ],
+                ),
+              ],
+            )));
+  } else {
+    return Container(
+        color: Colors.blueAccent,
+        child: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            FadeInImage.assetNetwork(
+              image: photos.first.toString(),
+              fit: BoxFit.fill,
+              placeholder: "",
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    price,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Style.Fonts.N2,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
 }
 
 String PostingDateProcessor(data) {

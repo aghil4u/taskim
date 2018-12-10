@@ -75,6 +75,7 @@ class _ListingsContainerState extends State<ExploreListings> {
                     "location",
                     items[index].data["Renumeration"],
                     Colors.blue,
+                    items[index].data["Photos"],
                     index),
               );
             }

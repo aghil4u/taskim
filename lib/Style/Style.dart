@@ -8,11 +8,17 @@ class Pigments {
   static const Color loginGradientStart = const Color.fromRGBO(234, 44, 109, 1);
   static const Color loginGradientEnd = const Color.fromRGBO(100, 0, 400, 1);
 
+  static const Color Gradient1Start = const Color.fromRGBO(250, 0, 139, 1);
+  static const Color Gradient1End = const Color.fromRGBO(50, 5, 100, 1);
+
   static const Color Gradient2Start = const Color.fromRGBO(200, 0, 200, 1);
   static const Color Gradient2End = const Color.fromRGBO(0, 0, 400, 1);
 
   static const Color Gradient3Start = const Color.fromRGBO(500, 100, 0, 1);
   static const Color Gradient3End = const Color.fromRGBO(400, 0, 100, 1);
+
+  static const Color Gradient4Start = const Color.fromRGBO(0, 200, 500, 1);
+  static const Color Gradient4End = const Color.fromRGBO(20, 0, 400, 1);
 
   static const Color PrimaryColor = const Color.fromRGBO(100, 0, 400, 1);
 
@@ -85,4 +91,10 @@ class FadePageRoute<T> extends MaterialPageRoute<T> {
       child: child,
     );
   }
+}
+
+class Shapes {
+  static RoundedRectangleBorder DefaultCardShape = RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(8.0),
+  );
 }
