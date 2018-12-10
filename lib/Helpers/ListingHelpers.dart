@@ -160,7 +160,7 @@ imageCell(List<dynamic> photos, String price) {
           fit: StackFit.expand,
           children: <Widget>[
             FadeInImage.assetNetwork(
-              image: photos.first.toString(),
+              image: photos[0].toString(),
               fit: BoxFit.fill,
               placeholder: "",
             ),

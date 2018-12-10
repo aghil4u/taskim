@@ -34,6 +34,7 @@ class _CreateListingPageState extends State<CreateListingPage>
   String _dateType2 = "to";
   String _currency = "USD";
   List<String> _listingPhotos = [];
+
   bool date2Visibility = false;
 //------------------------------------
 
@@ -94,7 +95,7 @@ class _CreateListingPageState extends State<CreateListingPage>
                   TitlePage(),
                   RenumerationPage(),
                   DescriptionPage(),
-                  PhotosPage(),
+                  PhotosPage(parent: this),
                   LocationPage(),
                   PreviewPage()
                 ],
@@ -445,76 +446,6 @@ class _CreateListingPageState extends State<CreateListingPage>
         ));
   }
 
-  Widget PhotosPage() {
-    return Container(
-        decoration: new BoxDecoration(
-          gradient: new LinearGradient(
-              colors: [
-                iTheme.Pigments.Gradient4Start,
-                iTheme.Pigments.Gradient4End
-              ],
-              begin: const FractionalOffset(0.0, 0.0),
-              end: const FractionalOffset(1.0, 1.0),
-              stops: [0.0, 1.0],
-              tileMode: TileMode.clamp),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(30),
-          child: Center(
-              child: Wrap(
-            children: <Widget>[
-              Text(
-                "SOME PHOTOS RELATED TO THE TASK ",
-                style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 40.0,
-                    color: Colors.white),
-              ),
-              Container(
-                  height: 200,
-                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                  child: GridView.count(
-                    crossAxisCount: 3,
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () => AddPhotoFromCamera(),
-                        child: Card(
-                          elevation: 10,
-                          color: Colors.white70,
-                          shape: iTheme.Shapes.DefaultCardShape,
-                          child: InkWell(
-                            child: Center(
-                              child: Icon(
-                                Icons.add_a_photo,
-                                size: 50,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () => AddPhotoFromGallery(),
-                        child: Card(
-                          elevation: 10,
-                          color: Colors.white70,
-                          shape: iTheme.Shapes.DefaultCardShape,
-                          child: InkWell(
-                            child: Center(
-                              child: Icon(
-                                Icons.add_photo_alternate,
-                                size: 50,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  )),
-            ],
-          )),
-        ));
-  }
-
   Widget LocationPage() {
     return Container(
       color: Colors.amber,
@@ -597,6 +528,97 @@ class _CreateListingPageState extends State<CreateListingPage>
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+}
+
+class PhotosPage extends StatefulWidget {
+  final _CreateListingPageState parent;
+  const PhotosPage({Key key, this.parent}) : super(key: key);
+  _PhotosPageState createState() => _PhotosPageState(this.parent);
+}
+
+class _PhotosPageState extends State<PhotosPage>
+    with AutomaticKeepAliveClientMixin<PhotosPage> {
+  List<Widget> _PhotoList;
+
+  _PhotosPageState(_CreateListingPageState parent);
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _PhotoList = <Widget>[
+      InkWell(
+        onTap: () => AddPhotoFromCamera(),
+        child: Card(
+          elevation: 10,
+          color: Colors.white70,
+          shape: iTheme.Shapes.DefaultCardShape,
+          child: InkWell(
+            child: Center(
+              child: Icon(
+                Icons.add_a_photo,
+                size: 50,
+              ),
+            ),
+          ),
+        ),
+      ),
+      InkWell(
+        onTap: () => AddPhotoFromGallery(),
+        child: Card(
+          elevation: 10,
+          color: Colors.white70,
+          shape: iTheme.Shapes.DefaultCardShape,
+          child: InkWell(
+            child: Center(
+              child: Icon(
+                Icons.add_photo_alternate,
+                size: 50,
+              ),
+            ),
+          ),
+        ),
+      )
+    ];
+    return Container(
+        decoration: new BoxDecoration(
+          gradient: new LinearGradient(
+              colors: [
+                iTheme.Pigments.Gradient4Start,
+                iTheme.Pigments.Gradient4End
+              ],
+              begin: const FractionalOffset(0.0, 0.0),
+              end: const FractionalOffset(1.0, 1.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(30),
+          child: Center(
+              child: Wrap(
+            children: <Widget>[
+              Text(
+                "SOME PHOTOS RELATED TO THE TASK ",
+                style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 40.0,
+                    color: Colors.white),
+              ),
+              Container(
+                  height: 200,
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  child: GridView.count(
+                    crossAxisCount: 3,
+                    children: _PhotoList,
+                    addAutomaticKeepAlives: true,
+                  )),
+            ],
+          )),
+        ));
+  }
 
   AddPhotoFromCamera() async {
     var tempImage =
@@ -616,15 +638,46 @@ class _CreateListingPageState extends State<CreateListingPage>
 
   uploadImage(File tempImage) {
     var randomno = Random().nextInt(50000);
+
     final StorageReference firebaseStorageRef = FirebaseStorage.instance
         .ref()
         .child('listingImages/${randomno.toString()}.jpg');
     StorageUploadTask task = firebaseStorageRef.putFile(tempImage);
 
     task.future.then((value) {
-      _listingPhotos.add(value.downloadUrl.toString());
+      setState(() {
+        _PhotoList.add(PhotoThumbailCard(value.downloadUrl.toString()));
+      });
+
+      widget.parent.setState(() {
+        widget.parent._listingPhotos.add(value.downloadUrl.toString());
+      });
     }).catchError((e) {
       print(e);
     });
   }
+
+  Widget PhotoThumbailCard(String string) {
+    return InkWell(
+      onTap: () {},
+      child: Card(
+        elevation: 10,
+        color: Colors.white70,
+        shape: iTheme.Shapes.DefaultCardShape,
+        child: InkWell(
+            child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          child: FadeInImage.assetNetwork(
+            placeholder: "",
+            image: string,
+            fit: BoxFit.fill,
+          ),
+        )),
+      ),
+    );
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
