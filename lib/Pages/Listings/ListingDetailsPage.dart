@@ -51,6 +51,7 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
             children: <Widget>[
               Positioned.fill(
                 child: DashboardBackground(
+                  image: widget.listing.data["Photos"][0],
                   showIcon: false,
                 ),
               ),

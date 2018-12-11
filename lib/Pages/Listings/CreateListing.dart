@@ -544,11 +544,6 @@ class _PhotosPageState extends State<PhotosPage>
 
   @override
   void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     _PhotoList = <Widget>[
       InkWell(
         onTap: () => AddPhotoFromCamera(),
@@ -583,6 +578,11 @@ class _PhotosPageState extends State<PhotosPage>
         ),
       )
     ];
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
         decoration: new BoxDecoration(
           gradient: new LinearGradient(
@@ -596,24 +596,41 @@ class _PhotosPageState extends State<PhotosPage>
               tileMode: TileMode.clamp),
         ),
         child: Padding(
-          padding: EdgeInsets.all(30),
+          padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
           child: Center(
-              child: Wrap(
+              child: Flex(
+            direction: Axis.vertical,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                "SOME PHOTOS RELATED TO THE TASK ",
-                style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 40.0,
-                    color: Colors.white),
+              Expanded(
+                flex: 1,
+                child: Container(),
               ),
-              Container(
-                  height: 200,
-                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                  child: GridView.count(
-                    crossAxisCount: 3,
-                    children: _PhotoList,
+              Wrap(
+                children: <Widget>[
+                  Text(
+                    "SOME PHOTOS RELATED TO THE TASK ",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 40.0,
+                        color: Colors.white),
+                  ),
+                ],
+              ),
+              Expanded(
+                  flex: 2,
+                  // height: 150 * ((_PhotoList.length - 1) / 3),
+                  // padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  child: GridView.builder(
+                    physics: BouncingScrollPhysics(),
+                    itemCount: _PhotoList.length,
                     addAutomaticKeepAlives: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3),
+                    itemBuilder: (BuildContext context, int index) {
+                      return _PhotoList[index];
+                    },
                   )),
             ],
           )),
@@ -645,12 +662,14 @@ class _PhotosPageState extends State<PhotosPage>
     StorageUploadTask task = firebaseStorageRef.putFile(tempImage);
 
     task.future.then((value) {
-      setState(() {
-        _PhotoList.add(PhotoThumbailCard(value.downloadUrl.toString()));
+      String address = value.downloadUrl.toString();
+      widget.parent.setState(() {
+        widget.parent._listingPhotos.add(address);
       });
 
-      widget.parent.setState(() {
-        widget.parent._listingPhotos.add(value.downloadUrl.toString());
+      setState(() {
+        _PhotoList.add(PhotoThumbailCard(address));
+        print("ReachedHere");
       });
     }).catchError((e) {
       print(e);
@@ -658,22 +677,26 @@ class _PhotosPageState extends State<PhotosPage>
   }
 
   Widget PhotoThumbailCard(String string) {
-    return InkWell(
-      onTap: () {},
-      child: Card(
-        elevation: 10,
-        color: Colors.white70,
-        shape: iTheme.Shapes.DefaultCardShape,
-        child: InkWell(
-            child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-          child: FadeInImage.assetNetwork(
-            placeholder: "",
-            image: string,
-            fit: BoxFit.fill,
-          ),
-        )),
-      ),
+    return
+        // InkWell(
+        //   onTap: () {},
+        //   child:
+        Card(
+      margin: EdgeInsets.all(10),
+      elevation: 10,
+
+      // color: Colors.white70,
+      shape: iTheme.Shapes.DefaultCardShape,
+      child: InkWell(
+          child: ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+        child: FadeInImage.assetNetwork(
+          placeholder: "",
+          image: string,
+          fit: BoxFit.fill,
+        ),
+      )),
+      // ),
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task.im/Helpers/Dashboard_Helper.dart';
 import 'package:task.im/Style/Style.dart' as Style;
 
 Container ListingTile_Square(String title, String description, String location,
@@ -201,4 +202,68 @@ String PostingDateProcessor(data) {
   }
 
   return text;
+}
+
+class ListingHeaderPhotoCoursel extends StatefulWidget {
+  final List<dynamic> images;
+
+  const ListingHeaderPhotoCoursel({Key key, this.images}) : super(key: key);
+
+  _ListingHeaderPhotoCourselState createState() =>
+      _ListingHeaderPhotoCourselState();
+}
+
+class _ListingHeaderPhotoCourselState extends State<ListingHeaderPhotoCoursel> {
+  static List<Color> kitGradients = [
+    Style.Pigments.loginGradientStart,
+    Style.Pigments.loginGradientEnd,
+  ];
+
+  // DashboardBackground({this.showIcon = true, this.image});
+
+  Widget topHalf(BuildContext context) {
+    var deviceSize = MediaQuery.of(context).size;
+    return new Flexible(
+      flex: 2,
+      child: ClipPath(
+        clipper: new ArcClipper(),
+        child: Stack(
+          children: <Widget>[
+            new Container(
+              decoration: new BoxDecoration(
+                  gradient: new LinearGradient(
+                end: AlignmentDirectional(0, 2),
+                colors: kitGradients,
+              )),
+            ),
+            new Container(
+                width: double.infinity,
+                child: widget.images != null
+                    ? PageView.builder(
+                        itemCount: widget.images.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Image.network(
+                            widget.images[index],
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      )
+                    : new Container())
+          ],
+        ),
+      ),
+    );
+  }
+
+  final bottomHalf = new Flexible(
+    flex: 3,
+    child: new Container(),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return new Column(
+      children: <Widget>[topHalf(context), bottomHalf],
+    );
+  }
 }
