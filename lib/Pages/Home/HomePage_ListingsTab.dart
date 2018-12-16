@@ -76,6 +76,7 @@ class _HomePage_ListingsTabState extends State<HomePage_ListingsTab> {
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         body: Container(
+          color: Style.Pigments.DefaultBg,
           child: Stack(
             fit: StackFit.expand,
             children: <Widget>[

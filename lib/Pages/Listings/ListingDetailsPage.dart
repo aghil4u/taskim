@@ -46,12 +46,13 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         body: Container(
+          color: Pigments.DefaultBg,
           child: Stack(
             fit: StackFit.expand,
             children: <Widget>[
               Positioned.fill(
                 child: DashboardBackground(
-                  image: widget.listing.data["Photos"][0],
+                  // image: widget.listing.data["Photos"][0],
                   showIcon: false,
                 ),
               ),
@@ -66,9 +67,9 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
                         AppBarRegion(context),
                         TitleBarRegion(),
                         DescriptionRegion(),
+                        PhotosRegion(context),
                         map,
                         // MapRegion(context),
-                        PhotosRegion(context),
                         Header(context, "Similar Listings"),
                         FeaturedListings()
 
@@ -94,17 +95,37 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
             "Description Goes here",
             "Location",
             '800 USD',
-            Colors.grey),
-        ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.grey),
-        ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.grey),
-        ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.grey),
-        ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.grey),
-        ListingTile_Square("Title can be as long as it wants!",
-            "Description Goes here", "Location", '800 USD', Colors.grey),
+            Colors.lightBlueAccent),
+        ListingTile_Square(
+            "Title can be as long as it wants!",
+            "Description Goes here",
+            "Location",
+            '800 USD',
+            Colors.lightBlueAccent),
+        ListingTile_Square(
+            "Title can be as long as it wants!",
+            "Description Goes here",
+            "Location",
+            '800 USD',
+            Colors.lightBlueAccent),
+        ListingTile_Square(
+            "Title can be as long as it wants!",
+            "Description Goes here",
+            "Location",
+            '800 USD',
+            Colors.lightBlueAccent),
+        ListingTile_Square(
+            "Title can be as long as it wants!",
+            "Description Goes here",
+            "Location",
+            '800 USD',
+            Colors.lightBlueAccent),
+        ListingTile_Square(
+            "Title can be as long as it wants!",
+            "Description Goes here",
+            "Location",
+            '800 USD',
+            Colors.lightBlueAccent),
       ],
     );
   }
@@ -130,18 +151,72 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
     );
   }
 
-  SliverPersistentHeader PhotosRegion(BuildContext context) {
-    return SliverPersistentHeader(
-      delegate: _SliverAppBarDelegate(
-          minHeight: 150,
-          maxHeight: 150,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: Card(
+  SliverList PhotosRegion(BuildContext context) {
+    List<dynamic> pics = widget.listing.data["Photos"];
+    if (pics != null) {
+      return SliverList(
+          delegate: SliverChildListDelegate([
+        Padding(
+          padding: EdgeInsets.fromLTRB(8, 0, 8, 10),
+          child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
               elevation: 3,
-            ),
-          )),
-    );
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                    child: Text(
+                      "IMAGES",
+                      style: Fonts.S2,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Divider(
+                    height: 20,
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    height: 200,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: pics.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: FadeInImage.assetNetwork(
+                                height: 150,
+                                image: pics[index],
+                                placeholder: "",
+                                fit: BoxFit.fitHeight,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              )),
+        )
+      ]));
+    } else {
+      return SliverList(
+          delegate: SliverChildListDelegate([
+        Container(
+          height: 2,
+        )
+      ]));
+    }
   }
 
   SliverList DescriptionRegion() {
@@ -162,7 +237,7 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                   child: Text(
-                    "TASK DESCRIPTION",
+                    "MORE DETAILS",
                     style: Fonts.S2,
                     textAlign: TextAlign.center,
                   ),
@@ -208,8 +283,9 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
   }
 
   SliverList MapRegion(BuildContext context) {
-    double lat = double.tryParse(widget.listing.data["Lat"]);
-    double lon = double.tryParse(widget.listing.data["Lon"]);
+    double lat = widget.listing.data["Lat"];
+    double lon = widget.listing.data["Lon"];
+    double zoom = widget.listing.data["Zoom"];
 
     if (lat != null && lon != null) {
       return SliverList(
@@ -232,7 +308,7 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
                     child: GoogleMap(
                       options: GoogleMapOptions(
                         cameraPosition: CameraPosition(
-                            target: LatLng(lat, lon), zoom: 12.0),
+                            target: LatLng(lat, lon), zoom: zoom),
                       ),
                       onMapCreated: (GoogleMapController controller) {
                         controller.addMarker(
@@ -279,17 +355,28 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
                                   Expanded(
-                                      child: Container(
-                                    height: 61,
-                                    child: Text(
-                                      widget.listing.data["Title"],
-                                      // "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa",
-                                      maxLines: 3,
-                                      softWrap: true,
-                                      style: Fonts.T1,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Container(
+                                          height: 40,
+                                          child: Text(
+                                            widget.listing.data["Title"],
+                                            //"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the",
+                                            maxLines: 3,
+                                            softWrap: true,
+                                            style: Fonts.T1,
+                                          ),
+                                          alignment: Alignment(-1, 0),
+                                        ),
+                                        Container(
+                                          height: 21,
+                                          child: GetListingDateDetail(
+                                              widget.listing.data),
+                                          alignment: Alignment(-1, 0),
+                                        )
+                                      ],
                                     ),
-                                    alignment: Alignment(0, 0),
-                                  )),
+                                  ),
                                   //VerticalDivider(),
                                   Padding(
                                     padding: EdgeInsets.only(left: 10),
@@ -298,14 +385,16 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         Text(
-                                          widget.listing.data["Renumeration"],
+                                          widget.listing.data["Renumeration"] +
+                                              " " +
+                                              widget.listing.data["Currency"],
                                           style: Fonts.N1,
                                         ),
                                         Divider(
                                           height: 4,
                                         ),
                                         Text(
-                                          "NEGOTIABLE",
+                                          "PER TASK",
                                           style: Fonts.S2,
                                         ),
                                       ],
@@ -437,6 +526,52 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
         ),
       ),
     );
+  }
+
+  GetListingDateDetail(data) {
+    var fromdate = data["FromDate"];
+    var toDate = data["ToDate"];
+    var fromDateType = data["FromDateType"];
+    var toDateType = data["ToDateType"];
+    if (fromDateType.toString().toUpperCase() == "ON") {
+      return Text(
+        "ON " + fromdate,
+        //"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the",
+        maxLines: 3,
+        softWrap: true,
+        style: Fonts.S3,
+      );
+    }
+
+    if (fromDateType.toString().toUpperCase() == "BEFORE") {
+      return Text(
+        "BEFORE " + fromdate,
+        //"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the",
+        maxLines: 3,
+        softWrap: true,
+        style: Fonts.S3,
+      );
+    }
+
+    if (fromDateType.toString().toUpperCase() == "FROM") {
+      if (toDateType.toString().toUpperCase() == "FOREVER") {
+        return Text(
+          "FROM " + fromdate + " FOR EVER (AND EVER)",
+          //"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the",
+          maxLines: 3,
+          softWrap: true,
+          style: Fonts.S3,
+        );
+      } else {
+        return Text(
+          "FROM " + fromdate + " TO " + toDate,
+          //"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the",
+          maxLines: 3,
+          softWrap: true,
+          style: Fonts.S3,
+        );
+      }
+    }
   }
 }
 

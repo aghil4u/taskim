@@ -18,6 +18,8 @@ dependencies:
   cupertino_icons: ^0.1.2
   permission_handler: "^2.1.2"
   intl:
+  geocoder:
+
 
 dev_dependencies:
   flutter_test:

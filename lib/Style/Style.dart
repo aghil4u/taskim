@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 class Pigments {
   const Pigments();
 
+  static const Color DefaultBg = const Color.fromRGBO(230, 230, 230, 1);
+
   static const Color loginGradientStart = const Color.fromRGBO(234, 44, 109, 1);
   static const Color loginGradientEnd = const Color.fromRGBO(100, 0, 400, 1);
 
@@ -40,7 +42,9 @@ class Format {
 
 class Fonts {
   static final TextStyle T1 = TextStyle(
-      fontFamily: Fonts.ralewayFont, fontWeight: FontWeight.w700, fontSize: 18);
+      fontFamily: Fonts.quickBoldFont,
+      fontWeight: FontWeight.w700,
+      fontSize: 15);
 
   static final TextStyle S1 =
       TextStyle(fontFamily: Fonts.ralewayFont, fontSize: 15);
@@ -58,8 +62,9 @@ class Fonts {
       fontWeight: FontWeight.bold);
 
   static final TextStyle N1 = TextStyle(
-      fontSize: 20,
+      fontSize: 18,
       color: Colors.purple,
+      letterSpacing: 1,
       fontFamily: Fonts.quickBoldFont,
       fontWeight: FontWeight.w800);
 

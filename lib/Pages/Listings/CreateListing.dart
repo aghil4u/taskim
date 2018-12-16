@@ -4,10 +4,12 @@ import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:task.im/Style/Style.dart' as iTheme;
 import 'package:task.im/services/ListingManager.dart';
 import 'dart:math' as math;
+import 'package:geocoder/geocoder.dart';
 
 class CreateListingPage extends StatefulWidget {
   const CreateListingPage({
@@ -33,9 +35,16 @@ class _CreateListingPageState extends State<CreateListingPage>
   String _dateType = "before";
   String _dateType2 = "to";
   String _currency = "USD";
+  String _locationType = "NEAR";
   List<String> _listingPhotos = [];
 
   bool date2Visibility = false;
+  bool chooseLocationVisibility = true;
+  String _location = "CHOOSE LOCATION";
+  double _lat;
+  double _lon;
+  double _zoom;
+  GoogleMapController gmc;
 //------------------------------------
 
   void showInSnackBar(String value) {
@@ -87,7 +96,7 @@ class _CreateListingPageState extends State<CreateListingPage>
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.white)))),
           child: Container(
-              color: Colors.pink,
+              color: Colors.grey[900],
               child: PageView(
                 physics: BouncingScrollPhysics(),
                 controller: _pvc,
@@ -448,13 +457,111 @@ class _CreateListingPageState extends State<CreateListingPage>
 
   Widget LocationPage() {
     return Container(
-      color: Colors.amber,
-      child: Center(
-          child: Text(
-        "PAGE1",
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-      )),
-    );
+        decoration: new BoxDecoration(
+          gradient: new LinearGradient(
+              colors: [
+                iTheme.Pigments.Gradient2Start,
+                iTheme.Pigments.Gradient2End
+              ],
+              begin: const FractionalOffset(0.0, 0.0),
+              end: const FractionalOffset(1.0, 1.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(30),
+          child: Center(
+              child: Wrap(
+            children: <Widget>[
+              Text(
+                "TASK IS LOCATED",
+                style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 40.0,
+                    color: Colors.white),
+              ),
+              Row(
+                children: <Widget>[
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      value: _locationType,
+                      iconSize: 30,
+                      items: [
+                        DropdownMenuItem(
+                          value: "NEAR",
+                          child: Text(
+                            "NEAR",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                                color: Colors.grey[400]),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: "AT",
+                          child: Text(
+                            "AT",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                                color: Colors.grey[400]),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: "AROUND",
+                          child: Text(
+                            "AROUND",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                                color: Colors.grey[400]),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: "ANYWHERE",
+                          child: Text(
+                            "ANYWHERE",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                                color: Colors.grey[400]),
+                          ),
+                        )
+                      ],
+                      onChanged: (String i) {
+                        setState(() {
+                          _locationType = i;
+                          if (i != "ANYWHERE") {
+                            chooseLocationVisibility = true;
+                          } else {
+                            chooseLocationVisibility = false;
+                          }
+                        });
+                      },
+                      style: _dts(),
+                    ),
+                  ),
+                  Opacity(
+                    opacity: chooseLocationVisibility ? 1 : 0,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: GestureDetector(
+                        child: Text(
+                          _location,
+                          overflow: TextOverflow.fade,
+                          style: _dts(),
+                        ),
+                        onTap: () {
+                          _selectLocation(_location);
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          )),
+        ));
   }
 
   Widget PreviewPage() {
@@ -500,8 +607,11 @@ class _CreateListingPageState extends State<CreateListingPage>
                     math.Random().nextInt(1000).toString(),
                 'UserName': manager.CurrentUser.displayName,
                 'UID': manager.CurrentUser.uid,
-                'Lat': "24." + math.Random().nextInt(500).toString(),
-                'Lon': "54." + math.Random().nextInt(500).toString(),
+                'LocationType': _locationType,
+                'Lat': _lat,
+                'Lon': _lon,
+                'Address': _location,
+                'Zoom': _zoom,
                 'Renumeration': _renumerationFieldController.text,
                 'Currency': _currency,
                 'Title': _titleFieldController.text,
@@ -528,6 +638,88 @@ class _CreateListingPageState extends State<CreateListingPage>
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+
+  Future _selectLocation(String location) async {
+    showDialog(
+        context: context,
+        builder: (_) => new AlertDialog(
+              title: new Text("Choose Location"),
+              contentPadding: EdgeInsets.all(0),
+              titlePadding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+              content: Container(
+                  height: 500,
+                  width: 350,
+                  child: Stack(
+                    children: <Widget>[
+                      GoogleMap(
+                        onMapCreated: _onMapCreated,
+                        options: GoogleMapOptions(
+                            myLocationEnabled: true,
+                            compassEnabled: false,
+                            tiltGesturesEnabled: false,
+                            trackCameraPosition: true,
+                            cameraPosition: CameraPosition(
+                                target: LatLng(24.454700, 54.377180),
+                                zoom: 10.0),
+                            scrollGesturesEnabled: true,
+                            rotateGesturesEnabled: true),
+                      ),
+                      Center(
+                        child: Icon(
+                          Icons.location_on,
+                          color: Colors.red,
+                          size: 25,
+                        ),
+                      )
+                    ],
+                  )),
+              shape: iTheme.Shapes.DefaultCardShape,
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('CANCEL'),
+                  color: Colors.blueAccent,
+                  textColor: Colors.white,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                FlatButton(
+                  child: Text('ACCEPT'),
+                  color: Colors.blueAccent,
+                  textColor: Colors.white,
+                  onPressed: () {
+                    if (gmc != null) {
+                      setState(() {
+                        _lat = gmc.cameraPosition.target.latitude;
+                        _lon = gmc.cameraPosition.target.longitude;
+                        _zoom = gmc.cameraPosition.zoom;
+
+                        _location = _lat.toString() + " " + _lon.toString();
+                      });
+
+                      updateLocation(gmc.cameraPosition.target);
+                    }
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ));
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    gmc = controller;
+  }
+
+  Future updateLocation(LatLng target) async {
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(
+        Coordinates(target.latitude, target.longitude));
+    var first = addresses.first;
+    if (first != null) {
+      setState(() {
+        _location = first.addressLine;
+      });
+    }
+  }
 }
 
 class PhotosPage extends StatefulWidget {
@@ -548,6 +740,7 @@ class _PhotosPageState extends State<PhotosPage>
       InkWell(
         onTap: () => AddPhotoFromCamera(),
         child: Card(
+          margin: EdgeInsets.all(10),
           elevation: 10,
           color: Colors.white70,
           shape: iTheme.Shapes.DefaultCardShape,
@@ -564,6 +757,7 @@ class _PhotosPageState extends State<PhotosPage>
       InkWell(
         onTap: () => AddPhotoFromGallery(),
         child: Card(
+          margin: EdgeInsets.all(10),
           elevation: 10,
           color: Colors.white70,
           shape: iTheme.Shapes.DefaultCardShape,
@@ -677,15 +871,9 @@ class _PhotosPageState extends State<PhotosPage>
   }
 
   Widget PhotoThumbailCard(String string) {
-    return
-        // InkWell(
-        //   onTap: () {},
-        //   child:
-        Card(
+    return Card(
       margin: EdgeInsets.all(10),
       elevation: 10,
-
-      // color: Colors.white70,
       shape: iTheme.Shapes.DefaultCardShape,
       child: InkWell(
           child: ClipRRect(
@@ -693,10 +881,9 @@ class _PhotosPageState extends State<PhotosPage>
         child: FadeInImage.assetNetwork(
           placeholder: "",
           image: string,
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
         ),
       )),
-      // ),
     );
   }
 
