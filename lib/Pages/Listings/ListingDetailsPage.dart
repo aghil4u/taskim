@@ -69,6 +69,7 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
                         DescriptionRegion(),
                         PhotosRegion(context),
                         map,
+                        OwnerRegion(),
                         // MapRegion(context),
                         Header(context, "Similar Listings"),
                         FeaturedListings()
@@ -87,7 +88,7 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
   SliverGrid FeaturedListings() {
     return SliverGrid.count(
       crossAxisCount: 2,
-      childAspectRatio: .9,
+      childAspectRatio: 1,
       mainAxisSpacing: 5.0,
       children: [
         ListingTile_Square(
@@ -253,6 +254,80 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
                   ),
                 ),
               ],
+            )),
+      )
+    ]));
+  }
+
+  SliverList OwnerRegion() {
+    return SliverList(
+        delegate: SliverChildListDelegate([
+      Padding(
+        padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+        child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            elevation: 3,
+            child: Padding(
+              padding: EdgeInsets.all(15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.blue,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(15, 10, 10, 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "A TASK BY",
+                              style: Fonts.S2,
+                              textAlign: TextAlign.center,
+                            ),
+                            Divider(
+                              height: 5,
+                            ),
+                            Text(
+                              widget.listing.data['UserName']
+                                  .toString()
+                                  .toUpperCase(),
+                              style: Fonts.T1,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      VerticalDivider(
+                        width: 20,
+                      ),
+                      IconButton(
+                        padding: EdgeInsets.all(10),
+                        icon: Icon(Icons.chat),
+                        color: Colors.blue,
+                        iconSize: 35,
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        padding: EdgeInsets.fromLTRB(10, 10, 15, 10),
+                        icon: Icon(Icons.call),
+                        color: Colors.pink,
+                        iconSize: 35,
+                        onPressed: () {},
+                      )
+                    ],
+                  ),
+                ],
+              ),
             )),
       )
     ]));
@@ -514,6 +589,7 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
                               FontAwesomeIcons.heart,
                               color: Colors.white,
                             ),
+                            onPressed: () {},
                           )
                         ],
                       )
